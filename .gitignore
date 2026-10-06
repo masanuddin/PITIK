@@ -49,3 +49,9 @@ lib/firebase_options.dart
 
 # Backup files
 backup_codes/
+
+# Kredensial firmware ESP32 (Wi-Fi & API key) — jangan di-commit
+firmware/**/secrets.h
+
+# Artefak build Gradle Android
+android/build/

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     // END: FlutterFire Configuration
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -9,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.smartquail_app"
+    namespace = "com.example.pitik_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -23,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.smartquail_app"
+        applicationId = "com.example.pitik_app"
         minSdk = flutter.minSdkVersion  // ← GANTI INI! Minimum untuk Phone Auth
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

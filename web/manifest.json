@@ -1,11 +1,11 @@
 {
-    "name": "smartquail_app",
-    "short_name": "smartquail_app",
+    "name": "PITIK",
+    "short_name": "PITIK",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "PITIK - Puyuh IoT Technology & Intelligent Kontrol",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

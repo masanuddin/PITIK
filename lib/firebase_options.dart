@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -50,21 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAxtACANl6k0S3b_QOjxQtSLc6-4u4EqiQ',
-    appId: '1:406727161324:web:689d945a7d3cd48abb3cc9',
-    messagingSenderId: '406727161324',
-    projectId: 'smartquail-18658',
-    authDomain: 'smartquail-18658.firebaseapp.com',
-    databaseURL: 'https://smartquail-18658-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'smartquail-18658.firebasestorage.app',
+    apiKey: 'AIzaSyDNJWbs6HWetyt2DzxLFZIf6M4LuSAb22k',
+    appId: '1:1095379077848:web:329334ca258cf248f825ad',
+    messagingSenderId: '1095379077848',
+    projectId: 'pitik-1ad2d',
+    authDomain: 'pitik-1ad2d.firebaseapp.com',
+    databaseURL: 'https://pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pitik-1ad2d.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB1WMZCjkk2n2MbNH7K-18Dn2xu0Qo1SfU',
-    appId: '1:406727161324:android:398efa5da2b7103ebb3cc9',
-    messagingSenderId: '406727161324',
-    projectId: 'smartquail-18658',
-    databaseURL: 'https://smartquail-18658-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'smartquail-18658.firebasestorage.app',
+    apiKey: 'AIzaSyCpCsQh2oLsD_NdY2XJrF8AY3bAGSxVp4k',
+    appId: '1:1095379077848:android:d3b6532e017f26abf825ad',
+    messagingSenderId: '1095379077848',
+    projectId: 'pitik-1ad2d',
+    databaseURL: 'https://pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pitik-1ad2d.firebasestorage.app',
+  );
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDndGgn9oy_lR-LkmQoR3J2Spe2mc5yWJs',
+    appId: '1:1095379077848:ios:896698d59afbef3cf825ad',
+    messagingSenderId: '1095379077848',
+    projectId: 'pitik-1ad2d',
+    databaseURL: 'https://pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pitik-1ad2d.firebasestorage.app',
+    iosBundleId: 'com.example.pitikApp',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDndGgn9oy_lR-LkmQoR3J2Spe2mc5yWJs',
+    appId: '1:1095379077848:ios:896698d59afbef3cf825ad',
+    messagingSenderId: '1095379077848',
+    projectId: 'pitik-1ad2d',
+    databaseURL: 'https://pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'pitik-1ad2d.firebasestorage.app',
+    iosBundleId: 'com.example.pitikApp',
   );
 }

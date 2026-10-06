@@ -1,5 +1,5 @@
-name: smartquail_app
-description: "A new Flutter project."
+name: pitik_app
+description: "PITIK - Puyuh IoT Technology & Intelligent Kontrol"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -63,7 +63,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/smartquail.png
+    - assets/images/pitik.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

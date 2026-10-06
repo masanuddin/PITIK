@@ -1,4 +1,4 @@
-package com.example.smartquail_app
+package com.example.pitik_app
 
 import io.flutter.embedding.android.FlutterActivity
 

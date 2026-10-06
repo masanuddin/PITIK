@@ -1,22 +1,22 @@
 {
   "project_info": {
-    "project_number": "406727161324",
-    "firebase_url": "https://smartquail-18658-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "smartquail-18658",
-    "storage_bucket": "smartquail-18658.firebasestorage.app"
+    "project_number": "1095379077848",
+    "firebase_url": "https://pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pitik-1ad2d",
+    "storage_bucket": "pitik-1ad2d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:406727161324:android:398efa5da2b7103ebb3cc9",
+        "mobilesdk_app_id": "1:1095379077848:android:d3b6532e017f26abf825ad",
         "android_client_info": {
-          "package_name": "com.example.smartquail_app"
+          "package_name": "com.example.pitik_app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB1WMZCjkk2n2MbNH7K-18Dn2xu0Qo1SfU"
+          "current_key": "AIzaSyCpCsQh2oLsD_NdY2XJrF8AY3bAGSxVp4k"
         }
       ],
       "services": {
