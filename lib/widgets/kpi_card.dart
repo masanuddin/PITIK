@@ -11,6 +11,13 @@ class KPICard extends StatelessWidget {
   final String status;
   final Color color;
 
+  /// Bila diisi, badge status diganti badge netral (abu-abu) berisi teks ini —
+  /// mis. "ADC · belum dikalibrasi" untuk nilai tanpa ambang.
+  final String? badgeLabel;
+
+  /// Warna badge [badgeLabel]; default abu-abu. Mis. merah untuk "Sensor error".
+  final Color? badgeColor;
+
   const KPICard({
     super.key,
     required this.icon,
@@ -18,6 +25,8 @@ class KPICard extends StatelessWidget {
     required this.value,
     required this.status,
     required this.color,
+    this.badgeLabel,
+    this.badgeColor,
   });
 
   @override
@@ -29,7 +38,7 @@ class KPICard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
           ),
         ],
@@ -40,7 +49,7 @@ class KPICard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: color, size: 18),
@@ -90,25 +99,30 @@ class KPICard extends StatelessWidget {
     Color badgeColor;
     String statusText;
 
-    switch (status) {
-      case 'danger':
-        badgeColor = const Color(0xFFFF3B30);
-        statusText = 'BAHAYA';
-        break;
-      case 'warning':
-        badgeColor = const Color(0xFFFF9500);
-        statusText = 'PERHATIAN';
-        break;
-      default:
-        badgeColor = const Color(0xFF34C759);
-        statusText = 'NORMAL';
+    if (badgeLabel != null) {
+      badgeColor = this.badgeColor ?? const Color(0xFF8E8E93);
+      statusText = badgeLabel!;
+    } else {
+      switch (status) {
+        case 'danger':
+          badgeColor = const Color(0xFFFF3B30);
+          statusText = 'BAHAYA';
+          break;
+        case 'warning':
+          badgeColor = const Color(0xFFFF9500);
+          statusText = 'PERHATIAN';
+          break;
+        default:
+          badgeColor = const Color(0xFF34C759);
+          statusText = 'NORMAL';
+      }
     }
 
     return Container(
       margin: const EdgeInsets.only(top: 2),
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
       decoration: BoxDecoration(
-        color: badgeColor.withOpacity(0.1),
+        color: badgeColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(3),
       ),
       child: Text(
@@ -118,6 +132,8 @@ class KPICard extends StatelessWidget {
           fontWeight: FontWeight.w700,
           color: badgeColor,
         ),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

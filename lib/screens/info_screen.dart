@@ -1,5 +1,5 @@
 // lib/screens/info_screen.dart
-// Halaman Bantuan & Kebijakan Privasi SmartQuail
+// Halaman Bantuan & Kebijakan Privasi PITIK
 
 import 'package:flutter/material.dart';
 
@@ -71,28 +71,29 @@ class _HelpTab extends StatelessWidget {
         items: [
           '🌡️ Suhu — Temperatur udara kandang dalam °C.',
           '💧 Kelembaban — Persentase kelembaban relatif (RH).',
-          '📊 THI (Temperature Humidity Index) — Indeks gabungan suhu dan kelembaban. Normal < 65, Warning 65–78, Bahaya > 78.',
-          '☁️ NH₃ / Amonia — Kadar gas amonia dalam ppm. Idealnya di bawah 25 ppm.',
+          '📊 THI (Temperature Humidity Index) — Indeks gabungan suhu dan kelembaban. Batasnya mengikuti Ambang THI di Pengaturan (default 72 dan 78): di bawah ambang normal = Normal, mulai ambang normal = Perhatian (kipas), mulai ambang bahaya = Bahaya (kipas + pompa).',
+          '☁️ NH₃ / Amonia — Nilai mentah sensor MQ-137 (ADC 0–4095), belum dikalibrasi sehingga belum bisa dibaca sebagai ppm. Gunakan untuk melihat tren naik/turun.',
         ],
       ),
       _HelpSection(
         icon: Icons.autorenew_rounded,
         color: const Color(0xFF5856D6),
-        title: 'Kontrol Manual',
+        title: 'Kontrol Perangkat',
         items: [
-          'Semua kontrol kipas dan pompa dilakukan secara manual dari aplikasi.',
-          'Gunakan Quick Presets (Semua OFF, Kipas Saja, Full Cool) untuk atur perangkat dengan cepat.',
+          'Mode Manual: kipas & pompa dinyalakan dari aplikasi atau layar Nextion di kandang. Setelah perangkat restart, mode selalu kembali ke Manual dengan kipas & pompa mati.',
+          'Mode Otomatis: ESP32 menyalakan kipas bila THI ≥ ambang normal dan pompa bila THI ≥ ambang bahaya. Selama mode otomatis, tombol kipas/pompa dikunci ("Dikendalikan otomatis").',
+          'Tombol hanya aktif saat perangkat online. Status "Relay aktual" menunjukkan kondisi relay sebenarnya di kandang.',
+          'Gunakan Preset Cepat (Semua OFF, Kipas Saja, Full Cool) untuk mengatur cepat di mode Manual.',
         ],
       ),
       _HelpSection(
         icon: Icons.air_rounded,
         color: const Color(0xFF34C759),
-        title: 'Kontrol Kipas (PWM)',
+        title: 'Kontrol Kipas',
         items: [
-          'Tombol kipas memiliki 3 state: MATI → 100% → 50% → MATI.',
-          '100% = kecepatan penuh (duty cycle maksimum).',
-          '50% = kecepatan sedang untuk hemat energi.',
-          'Aktifkan kipas untuk sirkulasi udara kandang.',
+          'Kipas dikontrol lewat relay — hanya ON (nyala) atau OFF (mati).',
+          'Tekan tombol kipas di layar Kontrol untuk menyalakan/mematikan.',
+          'Aktifkan kipas agar sirkulasi udara kandang lancar dan suhu turun.',
         ],
       ),
       _HelpSection(
@@ -100,9 +101,11 @@ class _HelpTab extends StatelessWidget {
         color: const Color(0xFFFF9500),
         title: 'Troubleshooting',
         items: [
-          'Data sensor tidak update → periksa koneksi internet dan status Firebase.',
-          'Relay tidak merespons → pastikan Mode Manual aktif dan ESP32 online.',
-          'Nilai sensor 0 semua → kemungkinan sensor DHT/MQ135 belum terbaca, cek kabel sensor.',
+          'Data sensor tidak update / perangkat offline → tekan "Sambungkan Ulang" (di Dashboard, Kontrol, atau Pengaturan). Bila hasilnya "perangkat belum mengirim data", periksa daya & WiFi ESP32 di kandang; bila "gagal terhubung ke server", periksa internet HP.',
+          'Relay tidak merespons → pastikan ESP32 online (indikator hijau), mode Manual, dan relay tidak dinonaktifkan di perangkat.',
+          'Pakan tidak keluar → perintah pakan yang dikirim saat perangkat offline tidak dijalankan; kirim ulang setelah perangkat online.',
+          'Muncul "Sensor error (DHT22)" → sensor suhu/kelembaban tidak terbaca, cek kabel DHT22.',
+          'OTP tidak terkirim → gunakan nomor test, atau hubungi developer (region/billing SMS).',
           'Aplikasi crash → clear cache atau reinstall aplikasi.',
         ],
       ),
@@ -111,7 +114,7 @@ class _HelpTab extends StatelessWidget {
         color: const Color(0xFFFF3B30),
         title: 'Kontak Developer',
         items: [
-          '📧 Email: smartquail.dev@gmail.com',
+          '📧 Email: widodo@binus.edu',
           '🏫 BINUS University — Computer Science (AI & Robotika)',
           'Developer: Ricky Rudiansyah & Marcellino Asanuddin',
           'Supervisor: Prof. Dr. Ir. Widodo Budiharto',
@@ -158,7 +161,7 @@ class _HelpSectionState extends State<_HelpSection> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8),
         ],
       ),
       child: Column(
@@ -173,7 +176,7 @@ class _HelpSectionState extends State<_HelpSection> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: widget.color.withOpacity(0.1),
+                      color: widget.color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(widget.icon, color: widget.color, size: 20),
@@ -263,7 +266,7 @@ class _PrivacyTab extends StatelessWidget {
           color: const Color(0xFF007AFF),
           title: 'Tentang Kebijakan Ini',
           content:
-              'Kebijakan Privasi ini menjelaskan bagaimana aplikasi SmartQuail mengumpulkan, menggunakan, dan melindungi data Anda. Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan yang dijelaskan di bawah ini.',
+              'Kebijakan Privasi ini menjelaskan bagaimana aplikasi PITIK mengumpulkan, menggunakan, dan melindungi data Anda. Dengan menggunakan aplikasi ini, Anda menyetujui ketentuan yang dijelaskan di bawah ini.',
         ),
         const SizedBox(height: 12),
         _privacyCard(
@@ -298,19 +301,11 @@ class _PrivacyTab extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _privacyCard(
-          icon: Icons.child_care_rounded,
-          color: const Color(0xFFFF3B30),
-          title: 'Pengguna di Bawah Umur',
-          content:
-              'Aplikasi SmartQuail ditujukan untuk peternak dan pengelola kandang. Kami tidak secara sengaja mengumpulkan data dari pengguna di bawah usia 13 tahun.',
-        ),
-        const SizedBox(height: 12),
-        _privacyCard(
           icon: Icons.update_rounded,
           color: const Color(0xFF8E8E93),
           title: 'Perubahan Kebijakan',
           content:
-              'Kami dapat memperbarui kebijakan ini sewaktu-waktu. Perubahan signifikan akan diinformasikan melalui pembaruan aplikasi. Tanggal efektif: 1 Januari 2026.',
+              'Kami dapat memperbarui kebijakan ini sewaktu-waktu. Perubahan signifikan akan diinformasikan melalui pembaruan aplikasi. Tanggal efektif: 28 September 2026.',
         ),
         const SizedBox(height: 12),
         _privacyCard(
@@ -318,12 +313,12 @@ class _PrivacyTab extends StatelessWidget {
           color: const Color(0xFF007AFF),
           title: 'Hubungi Kami',
           content:
-              'Untuk pertanyaan terkait kebijakan privasi ini, silakan hubungi:\n📧 smartquail.dev@gmail.com\n🏫 BINUS University, Jakarta',
+              'Untuk pertanyaan terkait kebijakan privasi ini, silakan hubungi:\n📧 widodo@binus.edu\n🏫 BINUS University, Jakarta',
         ),
         const SizedBox(height: 20),
         const Center(
           child: Text(
-            'SmartQuail v1.0.0 · BINUS University © 2026',
+            'PITIK v1.0.0 · BINUS University © 2026',
             style: TextStyle(fontSize: 11, color: Color(0xFFAEAEB2)),
           ),
         ),
@@ -344,7 +339,7 @@ class _PrivacyTab extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8),
         ],
       ),
       child: Column(
@@ -355,7 +350,7 @@ class _PrivacyTab extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(7),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(icon, color: color, size: 18),

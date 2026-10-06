@@ -86,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen>
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFFF5A623).withOpacity(0.3),
+                            color: const Color(0xFFF5A623).withValues(alpha: 0.3),
                             blurRadius: 30,
                             offset: const Offset(0, 15),
                           ),
@@ -104,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                     
                     // App name
                     const Text(
-                      'SmartQuail',
+                      'PITIK',
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w700,

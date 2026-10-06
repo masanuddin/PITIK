@@ -1,4 +1,4 @@
-// SmartQuail Mobile App
+// PITIK Mobile App
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,24 +6,25 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
-import 'screens/dashboard_screen.dart';   
+import 'screens/dashboard_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/control_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/login_screen.dart';
 import 'services/auth_service.dart';
+import 'services/device_state.dart';
+import 'services/pitik_repository.dart';
+import 'widgets/pitik_bottom_nav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
-  
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -32,17 +33,17 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  
-  runApp(const SmartQuailApp());
+
+  runApp(const PitikApp());
 }
 
-class SmartQuailApp extends StatelessWidget {
-  const SmartQuailApp({super.key});
+class PitikApp extends StatelessWidget {
+  const PitikApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SmartQuail',
+      title: 'PITIK',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -85,8 +86,14 @@ class AuthWrapper extends StatelessWidget {
           return const _SplashLoading();
         }
 
-        if (snapshot.hasData) {
-          return const MainNavigation();
+        final user = snapshot.data;
+        if (user != null) {
+          // Key per uid: ganti akun → DeviceState & tab dibuat ulang.
+          return MainNavigation(
+            key: ValueKey(user.uid),
+            isGuest: user.isAnonymous,
+            phoneNumber: user.phoneNumber,
+          );
         }
 
         return const LoginScreen();
@@ -117,7 +124,7 @@ class _SplashLoading extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF007AFF).withOpacity(0.3),
+                    color: const Color(0xFF007AFF).withValues(alpha: 0.3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -131,7 +138,7 @@ class _SplashLoading extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const Text(
-              'SmartQuail',
+              'PITIK',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
@@ -142,10 +149,7 @@ class _SplashLoading extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'IoT Climate Control',
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
             ),
             const SizedBox(height: 48),
             const SizedBox(
@@ -167,7 +171,11 @@ class _SplashLoading extends StatelessWidget {
 // MAIN NAVIGATION
 // ============================================================
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+  const MainNavigation({super.key, required this.isGuest, this.phoneNumber});
+
+  /// Tamu (login anonim) hanya boleh melihat: Kontrol & Pengaturan read-only.
+  final bool isGuest;
+  final String? phoneNumber;
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
@@ -176,80 +184,62 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const HistoryScreen(),
-    const ControlScreen(),
-    const SettingsScreen(),
+  // Satu repository (akses RTDB) + satu langganan realtime untuk semua tab.
+  final PitikRepository _repository = PitikRepository();
+  late final DeviceState _deviceState = DeviceState.fromRepository(_repository);
+
+  late final List<Widget> _screens = [
+    DashboardScreen(deviceState: _deviceState),
+    HistoryScreen(repository: _repository, deviceState: _deviceState),
+    ControlScreen(
+      repository: _repository,
+      deviceState: _deviceState,
+      readOnly: widget.isGuest,
+    ),
+    SettingsScreen(
+      repository: _repository,
+      deviceState: _deviceState,
+      isGuest: widget.isGuest,
+      phoneNumber: widget.phoneNumber,
+    ),
   ];
+
+  @override
+  void dispose() {
+    _deviceState.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(0, Icons.dashboard_rounded, 'Dashboard'),
-                _buildNavItem(1, Icons.show_chart_rounded, 'Riwayat'),
-                _buildNavItem(2, Icons.tune_rounded, 'Kontrol'),
-                _buildNavItem(3, Icons.settings_rounded, 'Pengaturan'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _currentIndex == index;
-    return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF007AFF).withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? const Color(0xFF007AFF) : const Color(0xFF8E8E93),
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? const Color(0xFF007AFF) : const Color(0xFF8E8E93),
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
+      // IndexedStack: tiap tab tetap hidup → posisi scroll & state terjaga.
+      body: IndexedStack(index: _currentIndex, children: _screens),
+      bottomNavigationBar: PitikBottomNav(
+        items: pitikNavItems,
+        currentIndex: _currentIndex,
+        onSelected: (i) => setState(() => _currentIndex = i),
       ),
     );
   }
 }
+
+/// Urutan tab = urutan [_MainNavigationState._screens].
+const List<PitikNavItem> pitikNavItems = [
+  PitikNavItem(
+      icon: Icons.dashboard_outlined,
+      activeIcon: Icons.dashboard_rounded,
+      label: 'Dashboard'),
+  PitikNavItem(
+      icon: Icons.show_chart_rounded,
+      activeIcon: Icons.show_chart_rounded,
+      label: 'Riwayat'),
+  PitikNavItem(
+      icon: Icons.tune_rounded,
+      activeIcon: Icons.tune_rounded,
+      label: 'Kontrol'),
+  PitikNavItem(
+      icon: Icons.settings_outlined,
+      activeIcon: Icons.settings_rounded,
+      label: 'Pengaturan'),
+];

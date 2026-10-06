@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const SizedBox(height: 60),
 
-              const SmartQuailLogo(size: 80),
+              const PitikLogo(size: 80),
 
               const SizedBox(height: 48),
 

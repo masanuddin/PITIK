@@ -406,13 +406,15 @@ class _AppleOTPInputState extends State<AppleOTPInput> {
     }
   }
 
-  void _onKeyDown(int index, RawKeyEvent event) {
-    if (event is RawKeyDownEvent &&
+  // Backspace di kotak kosong → pindah ke kotak sebelumnya.
+  KeyEventResult _onKeyEvent(int index, KeyEvent event) {
+    if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.backspace &&
         _controllers[index].text.isEmpty &&
         index > 0) {
       _focusNodes[index - 1].requestFocus();
     }
+    return KeyEventResult.ignored; // tetap diteruskan ke TextField
   }
 
   @override
@@ -437,9 +439,12 @@ class _AppleOTPInputState extends State<AppleOTPInput> {
               width: _focusNodes[index].hasFocus ? 2 : 1,
             ),
           ),
-          child: RawKeyboardListener(
-            focusNode: _focusNodes[index],
-            onKey: (event) => _onKeyDown(index, event),
+          // Focus pembungkus menerima key event yang naik dari TextField,
+          // tanpa memakai FocusNode yang sama dua kali.
+          child: Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onKeyEvent: (_, event) => _onKeyEvent(index, event),
             child: TextField(
               controller: _controllers[index],
               focusNode: _focusNodes[index],
@@ -466,10 +471,10 @@ class _AppleOTPInputState extends State<AppleOTPInput> {
 }
 
 // ==================== APPLE STYLE LOGO ====================
-class SmartQuailLogo extends StatelessWidget {
+class PitikLogo extends StatelessWidget {
   final double size;
 
-  const SmartQuailLogo({super.key, this.size = 80});
+  const PitikLogo({super.key, this.size = 80});
 
   @override
   Widget build(BuildContext context) {
@@ -478,7 +483,7 @@ class SmartQuailLogo extends StatelessWidget {
       children: [
         // Logo image
         Image.asset(
-          'assets/images/smartquail.png',
+          'assets/images/pitik.png',
           width: size * 2,    // dikali 2 biar lebih besar, sesuaikan sesukamu
           height: size * 2,
           fit: BoxFit.contain,
@@ -486,7 +491,7 @@ class SmartQuailLogo extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        // Subtitle (teks "SmartQuail" dihapus karena sudah ada di gambar)
+        // Subtitle (teks "PITIK" dihapus karena sudah ada di gambar)
         const Text(
           'IoT Climate Control',
           style: TextStyle(
