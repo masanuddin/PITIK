@@ -1,0 +1,135 @@
+diff --git a/firmware/pitik_v8_4/pitik_v8_4.ino b/firmware/pitik_v8_4/pitik_v8_4.ino
+index f8aff08..6920de6 100644
+--- a/firmware/pitik_v8_4/pitik_v8_4.ino
++++ b/firmware/pitik_v8_4/pitik_v8_4.ino
+@@ -1,5 +1,9 @@
+ // ============================================================
+-//  PITIK / SmartQuail v8.4.1 — ESP32-S3 (varian DHT22)
++//  PITIK / SmartQuail v8.4.2 — ESP32-S3 (varian DHT22)
++//  v8.4.2 (= v8.4.1 + D4): telemetry /sensor_data juga dikirim saat
++//        relay_fan / relay_pump / auto_mode / sensor_ok berubah (pada siklus
++//        kirim berikutnya; cadence & penundaan saat feeder bekerja tetap).
++//        Kebijakan: telemetry_policy.h (+ self-test static_assert).
+ //  v8.4.1: stream /controls membedakan snapshot (put "/") dari update
+ //        sebagian (patch "/"). Perintah fan/pump/auto_mode dari app
+ //        (Flutter update(), termasuk preset atomik) kini dijalankan.
+@@ -42,6 +46,8 @@
+ #include <addons/RTDBHelper.h>
+ #include "control_stream_policy.h"
+ #include "control_stream_policy_selftest.h"   // static_assert: gagal compile bila kebijakan berubah
++#include "telemetry_policy.h"
++#include "telemetry_policy_selftest.h"        // static_assert D4
+ 
+ // ============================================================
+ // KONFIGURASI JARINGAN
+@@ -52,7 +58,7 @@
+ #include "secrets.h"
+ #define FIREBASE_HOST    "pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app"
+ #define DEVICE_ID        "ESP32-01"
+-#define FW_VERSION       "8.4.1"
++#define FW_VERSION       "8.4.2"
+ 
+ // ============================================================
+ // PIN — SESUAI DOKUMEN. Jangan diubah tanpa update dokumen.
+@@ -855,9 +861,17 @@ void sendSensorData() {
+   static float lastT = NAN, lastH = NAN;
+   static int   lastRaw = -1;
+   static unsigned long lastForce = 0;
++  // D4: state yang terakhir BERHASIL dikirim (lihat telemetry_policy.h).
++  static bool                  sentOnce = false;
++  static pitik::TelemetryState lastSent = {false, false, false, false};
++  const  pitik::TelemetryState cur      = {fanState, pumpState, autoMode, sensorValid};
+   unsigned long now = millis();
+ 
+-  bool changed = (sensorValid && (!isfinite(lastT) ||
++  // D4: perubahan relay_fan / relay_pump / auto_mode / sensor_ok ikut memicu
++  // kirim pada pemanggilan berikutnya (cadence FIREBASE_SEND_INTERVAL; tetap
++  // ditunda saat feeder bekerja / Firebase belum siap / gagal kirim).
++  bool changed = pitik::telemetryStateChanged(sentOnce, lastSent, cur) ||
++                 (sensorValid && (!isfinite(lastT) ||
+                                   fabsf(temperature - lastT) >= 0.3f ||
+                                   fabsf(humidity - lastH) >= 1.0f)) ||
+                  lastRaw < 0 || abs(mq137Raw - lastRaw) >= 10;
+@@ -888,6 +902,7 @@ void sendSensorData() {
+ 
+   if (Firebase.RTDB.updateNode(&fbdo, PATH_SENSOR, &json)) {
+     lastT = temperature; lastH = humidity; lastRaw = mq137Raw; lastForce = now;
++    sentOnce = true; lastSent = cur;   // D4: cache diperbarui HANYA setelah sukses
+     firebaseErrors = 0;
+   } else {
+     noteFirebaseError("kirim sensor");
+diff --git a/firmware/pitik_v8_4/telemetry_policy.h b/firmware/pitik_v8_4/telemetry_policy.h
+new file mode 100644
+index 0000000..ee23186
+--- /dev/null
++++ b/firmware/pitik_v8_4/telemetry_policy.h
+@@ -0,0 +1,34 @@
++// ============================================================
++//  D4 — kebijakan kirim telemetry /sensor_data (dipakai firmware DAN self-test).
++//  Header murni tanpa Arduino/Firebase agar bisa diuji dengan static_assert.
++//
++//  Selain perubahan nilai sensor (logika lama), perubahan state berikut
++//  memicu pengiriman pada pemanggilan sendSensorData() BERIKUTNYA:
++//    relay_fan, relay_pump, auto_mode, sensor_ok (sensorValid).
++//  "Terakhir terkirim" hanya diperbarui setelah updateNode BERHASIL, sehingga
++//  kegagalan kirim dicoba lagi pada siklus berikutnya.
++//
++//  Tidak ada jaminan waktu: cadence tetap FIREBASE_SEND_INTERVAL, dan kirim
++//  tetap ditunda saat feeder bekerja, Wi-Fi/Firebase belum siap, atau gagal.
++// ============================================================
++#pragma once
++
++namespace pitik {
++
++struct TelemetryState {
++  bool fan;          // relay_fan  (state output yang diperintahkan, bukan feedback fisik)
++  bool pump;         // relay_pump (idem)
++  bool autoMode;     // auto_mode
++  bool sensorValid;  // sensor_ok
++};
++
++// true bila belum pernah berhasil kirim, atau salah satu state berbeda dari
++// state yang terakhir BERHASIL dikirim.
++constexpr bool telemetryStateChanged(bool sentOnce, TelemetryState lastSent,
++                                     TelemetryState now) {
++  return !sentOnce || lastSent.fan != now.fan || lastSent.pump != now.pump ||
++         lastSent.autoMode != now.autoMode ||
++         lastSent.sensorValid != now.sensorValid;
++}
++
++}  // namespace pitik
+diff --git a/firmware/pitik_v8_4/telemetry_policy_selftest.h b/firmware/pitik_v8_4/telemetry_policy_selftest.h
+new file mode 100644
+index 0000000..b5fbe08
+--- /dev/null
++++ b/firmware/pitik_v8_4/telemetry_policy_selftest.h
+@@ -0,0 +1,29 @@
++// ============================================================
++//  Self-test D4 (kebijakan telemetry) — dievaluasi oleh COMPILER toolchain
++//  ESP32 setiap kali sketch di-compile. Biaya runtime nol.
++// ============================================================
++#pragma once
++#include "telemetry_policy.h"
++
++namespace pitik {
++namespace selftest {
++
++constexpr TelemetryState kOff{false, false, false, true};
++
++// Belum pernah berhasil kirim → harus kirim.
++static_assert(telemetryStateChanged(false, kOff, kOff), "D4: kiriman pertama");
++// Tidak ada perubahan state → tidak memaksa kirim (logika sensor lama tetap berlaku).
++static_assert(!telemetryStateChanged(true, kOff, kOff), "D4: state sama");
++// Masing-masing perubahan state memicu kirim.
++static_assert(telemetryStateChanged(true, kOff, TelemetryState{true, false, false, true}), "D4: relay_fan");
++static_assert(telemetryStateChanged(true, kOff, TelemetryState{false, true, false, true}), "D4: relay_pump");
++static_assert(telemetryStateChanged(true, kOff, TelemetryState{false, false, true, true}), "D4: auto_mode");
++static_assert(telemetryStateChanged(true, kOff, TelemetryState{false, false, false, false}), "D4: sensor_ok");
++// Kembali ke nilai yang sudah terkirim → tidak dianggap berubah
++// (cache = nilai terakhir BERHASIL terkirim, bukan nilai sebelumnya di loop).
++static_assert(!telemetryStateChanged(true, TelemetryState{true, true, false, true},
++                                     TelemetryState{true, true, false, true}),
++              "D4: cache = terakhir terkirim");
++
++}  // namespace selftest
++}  // namespace pitik

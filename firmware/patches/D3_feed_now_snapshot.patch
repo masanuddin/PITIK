@@ -1,0 +1,83 @@
+diff --git a/firmware/pitik_v8_4/pitik_v8_4.ino b/firmware/pitik_v8_4/pitik_v8_4.ino
+index f8aff08..50f42e6 100644
+--- a/firmware/pitik_v8_4/pitik_v8_4.ino
++++ b/firmware/pitik_v8_4/pitik_v8_4.ino
+@@ -238,6 +238,7 @@ struct PendingCtl {
+   bool  hasFan, fan;
+   bool  hasPump, pump;
+   bool  feedNow;
++  bool  staleFeedNow;   // D3: feed_now=true di snapshot (perintah lama) -> dibuang
+   bool  hasAuto, autoMode;
+   bool  hasThiN; float thiN;
+   bool  hasThiD; float thiD;
+@@ -609,6 +610,7 @@ void mergePending(const PendingCtl &s) {
+   if (s.hasFan)  { pend.hasFan  = true; pend.fan  = s.fan;  }
+   if (s.hasPump) { pend.hasPump = true; pend.pump = s.pump; }
+   if (s.feedNow) { pend.feedNow = true; }
++  if (s.staleFeedNow) { pend.staleFeedNow = true; }
+   if (s.hasAuto) { pend.hasAuto = true; pend.autoMode = s.autoMode; }
+   if (s.hasThiN) { pend.hasThiN = true; pend.thiN = s.thiN; }
+   if (s.hasThiD) { pend.hasThiD = true; pend.thiD = s.thiD; }
+@@ -643,6 +645,12 @@ void streamCallback(FirebaseStream data) {
+       if (!pitik::rootKeyApplies(ev, k)) continue;
+       parseControlKey(k, valFromJson(j, k), p);   // kunci yang tidak ada → !ok → diabaikan
+     }
++    // D3: feed_now=true yang tertinggal di snapshot (dikirim saat ESP32 mati /
++    // stream putus) TIDAK dijalankan — hanya direset ke false (kontrak CLAUDE.md).
++    if (ev == pitik::RootEvent::Snapshot) {
++      Val fn = valFromJson(j, "feed_now");
++      if (fn.ok && fn.b) p.staleFeedNow = true;
++    }
+   } else {
+     parseControlKey(path.substring(1), valFromStream(data), p);
+   }
+@@ -706,6 +714,9 @@ void processPendingControls() {
+   if (p.feedNow) {
+     startFeeder("app");
+     syncFeedNowReset = true;   // selalu reset flag, meski feed ditolak
++  } else if (p.staleFeedNow) {
++    syncFeedNowReset = true;   // D3: perintah lama dibuang, flag tetap direset
++    logMsg("[Stream] feed_now lama di snapshot dibuang (tidak memberi pakan)");
+   }
+ }
+ 
+diff --git a/firmware/pitik_v8_4/control_stream_policy.h b/firmware/pitik_v8_4/control_stream_policy.h
+index cef2711..d064e67 100644
+--- a/firmware/pitik_v8_4/control_stream_policy.h
++++ b/firmware/pitik_v8_4/control_stream_policy.h
+@@ -38,6 +38,10 @@ constexpr RootEvent classifyRootEvent(const char *eventType) {
+                                      : RootEvent::Ignore;
+ }
+ 
++// D3: perintah sekali-jalan yang tidak boleh dieksekusi dari snapshot
++// (nilai lama yang tertinggal). Firmware hanya mereset flag-nya.
++constexpr bool isOneShotKey(const char *key) { return streq(key, "feed_now"); }
++
+ // Kunci aktuator/mode yang tidak boleh dipulihkan dari snapshot.
+ constexpr bool isActuatorKey(const char *key) {
+   return streq(key, "fan") || streq(key, "pump") || streq(key, "auto_mode");
+@@ -47,7 +51,7 @@ constexpr bool isActuatorKey(const char *key) {
+ // (Kunci yang tidak ada di payload tetap diabaikan oleh parser.)
+ constexpr bool rootKeyApplies(RootEvent ev, const char *key) {
+   return ev == RootEvent::Patch      ? true
+-         : ev == RootEvent::Snapshot ? !isActuatorKey(key)
++         : ev == RootEvent::Snapshot ? !isActuatorKey(key) && !isOneShotKey(key)
+                                      : false;
+ }
+ 
+diff --git a/firmware/pitik_v8_4/control_stream_policy_selftest.h b/firmware/pitik_v8_4/control_stream_policy_selftest.h
+index 77890fc..0e50c8a 100644
+--- a/firmware/pitik_v8_4/control_stream_policy_selftest.h
++++ b/firmware/pitik_v8_4/control_stream_policy_selftest.h
+@@ -25,8 +25,9 @@ static_assert(rootKeyApplies(RootEvent::Snapshot, "thi_normal"), "snapshot: amba
+ static_assert(rootKeyApplies(RootEvent::Snapshot, "thi_danger"), "snapshot: ambang dipakai");
+ static_assert(rootKeyApplies(RootEvent::Snapshot, "feed_hour1"), "snapshot: jadwal dipakai");
+ static_assert(rootKeyApplies(RootEvent::Snapshot, "feed_min3"), "snapshot: jadwal dipakai");
+-// Perilaku v8.4 dipertahankan (D3 terpisah): feed_now di snapshot masih diproses.
+-static_assert(rootKeyApplies(RootEvent::Snapshot, "feed_now"), "snapshot: feed_now (perilaku v8.4)");
++// D3: feed_now lama di snapshot tidak dieksekusi (hanya direset).
++static_assert(!rootKeyApplies(RootEvent::Snapshot, "feed_now"), "D3: snapshot feed_now dibuang");
++static_assert(isOneShotKey("feed_now") && !isOneShotKey("fan"), "D3: one-shot key");
+ 
+ // --- Patch root (Flutter update(), termasuk preset atomik) ---
+ static_assert(rootKeyApplies(RootEvent::Patch, "fan"), "patch: fan diproses");
