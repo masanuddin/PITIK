@@ -3,6 +3,7 @@
 // lib/services/auth_service.dart
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
 
 class AuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -71,6 +72,11 @@ class AuthService {
 
         // Verifikasi gagal
         verificationFailed: (FirebaseAuthException e) {
+          debugPrint(
+            '[AuthService] verifyPhoneNumber failed: code=${e.code}, '
+            'message=${e.message}, plugin=${e.plugin}',
+          );
+          final raw = (e.message ?? '').toLowerCase();
           String message;
           switch (e.code) {
             case 'invalid-phone-number':
@@ -82,8 +88,26 @@ class AuthService {
             case 'quota-exceeded':
               message = 'Kuota SMS habis. Coba lagi besok.';
               break;
+            case 'invalid-app-credential':
+            case 'app-not-authorized':
+              message =
+                  'Aplikasi tidak diotorisasi. Pastikan SHA-1/SHA-256 app sudah didaftarkan di Firebase Console.';
+              break;
+            case 'operation-not-allowed':
+              message =
+                  'Login nomor telepon belum diaktifkan di Firebase Console.';
+              break;
+            case 'missing-client-identifier':
+              message =
+                  'Konfigurasi Firebase tidak lengkap (missing client identifier).';
+              break;
             default:
-              message = 'Error: ${e.message ?? e.code}';
+              if (raw.contains('region')) {
+                message =
+                    'Region SMS belum diaktifkan. Hubungi developer untuk mengaktifkan SMS region policy.';
+              } else {
+                message = 'Error [${e.code}]: ${e.message ?? '-'}';
+              }
           }
           onError(message);
         },
@@ -191,7 +215,7 @@ class AuthService {
     try {
       await _auth.signOut();
     } catch (e) {
-      print('[AuthService] Sign out error: $e');
+      debugPrint('[AuthService] Sign out error: $e');
     }
   }
 }

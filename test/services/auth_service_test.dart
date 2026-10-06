@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:smartquail_app/services/auth_service.dart';
+import 'package:pitik_app/services/auth_service.dart';
 
 void main() {
   group('AuthService.formatPhoneNumber', () {
