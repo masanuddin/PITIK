@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=block">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}a{color:#2F62D9}a:hover{color:#2450B8}@keyframes pitik-spin{to{transform:rotate(360deg)}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F3F4F6;border-radius:32px;border:1px solid rgba(17,24,39,.14);box-shadow:0 1px 2px rgba(17,24,39,.05),0 16px 40px rgba(17,24,39,.08);font-family:Roboto,system-ui,sans-serif;color:#111827;-webkit-font-smoothing:antialiased">
+<div style="flex:none;height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font-size:14px;font-weight:500;font-variant-numeric:tabular-nums">
+<span>16.20</span>
+<div style="display:flex;align-items:center;gap:4px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">signal_cellular_alt</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">wifi</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">battery_full</span>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none">
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:4px 16px 20px">
+<div style="display:flex;align-items:center;gap:12px;padding:8px 0 4px">
+<span style="width:52px;height:52px;border-radius:14px;background:#E8EFFD;flex:none;display:flex;align-items:center;justify-content:center">
+<img src="assets/pitik-logo.png" alt="PITIK" style="width:38px;height:38px;border-radius:8px;object-fit:cover;display:block">
+</span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:calc(24px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.15">PITIK</span>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.3">Update 5 detik lalu</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.3">Update 4 hari lalu</span></sc-if>
+</div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="flex:none;display:flex;align-items:center;gap:8px;min-height:34px;padding:0 14px;border-radius:999px;background:#E6F4EA;color:#1E7B3A;font-size:calc(15px*var(--ts,1));font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#2EA350"></span>Online</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:8px;min-height:34px;padding:0 14px;border-radius:999px;background:#FDECEA;color:#B42318;font-size:calc(15px*var(--ts,1));font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#E5483B"></span>Offline</span></sc-if>
+</div>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FDF1EF;border:1px solid #F3C6BF;border-radius:20px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+<span style="width:44px;height:44px;border-radius:12px;background:#FBE0DB;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:24px;height:24px;font-size:24px;color:#C8372B">cloud_off</span></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3;color:#A8281E">Perangkat offline</span>
+<span style="font-size:calc(16px*var(--ts,1));line-height:1.45;color:#4A2520;text-wrap:pretty">Data di bawah adalah data terakhir, bukan kondisi saat ini.</span>
+<span style="font-size:calc(15px*var(--ts,1));font-weight:500;line-height:1.4;color:#4A2520">Data terakhir: <span style="white-space:nowrap">30 Sep 12:49 WIB</span> · <span style="white-space:nowrap">4 hari lalu</span></span>
+<div style="display:flex;flex-direction:column;margin-top:6px;margin-left:{{ rcShift }}">
+<button onClick="{{ reconnect }}" onPointerDown="{{ pressOn }}" onPointerUp="{{ pressOff }}" onPointerLeave="{{ pressOff }}" onPointerCancel="{{ pressOff }}" disabled="{{ busy }}" aria-busy="{{ busyAria }}" style="align-self:flex-start;max-width:100%;min-height:48px;padding:10px 16px 10px 14px;display:flex;align-items:center;gap:10px;border-radius:12px;border:1px solid #D5E0FA;background:{{ btnBg }};color:#2F62D9;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.25;text-align:left;cursor:{{ btnCursor }};transform:{{ btnTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent;touch-action:manipulation">
+<span style="width:20px;height:20px;flex:none;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ notBusy }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:20px;height:20px;font-size:20px">refresh</span></sc-if>
+<sc-if value="{{ busy }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>
+</span>
+<span style="display:grid;min-width:0">
+<span style="grid-area:1/1;visibility:{{ idleVis }};overflow-wrap:anywhere">Sambungkan Ulang</span>
+<span style="grid-area:1/1;visibility:{{ busyVis }};overflow-wrap:anywhere">Menyambungkan…</span>
+</span>
+</button>
+<div role="status" aria-live="polite" style="display:grid;grid-template-rows:{{ fbRows }};opacity:{{ fbOpacity }};transition:{{ fbTransition }}">
+<div style="overflow:hidden;min-height:0">
+<div style="padding-top:12px">
+<sc-if value="{{ resServerOk }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#FFFFFF;border:1px solid #F3D3CD">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:20px;height:20px;font-size:20px;margin-top:1px;color:#1E7B3A">cloud_done</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:calc(15px*var(--ts,1));line-height:1.45;text-wrap:pretty">
+<span style="font-weight:700;color:#111827">Server terhubung, tetapi belum ada data baru.</span>
+<span style="color:#374151">Periksa daya dan koneksi perangkat.</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ resFail }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:#FFFFFF;border:1px solid #F3D3CD">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:20px;height:20px;font-size:20px;margin-top:1px;color:#C8372B">cloud_off</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:calc(15px*var(--ts,1));line-height:1.45;text-wrap:pretty">
+<span style="font-weight:700;color:#111827">Belum dapat terhubung ke server.</span>
+<span style="color:#374151">Periksa internet ponsel Anda, lalu coba lagi.</span>
+</div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}">
+<div style="background:#F0F9F2;border:1px solid #CFEBD6;border-radius:20px;padding:16px;display:flex;gap:14px;align-items:flex-start">
+<span style="width:44px;height:44px;border-radius:12px;background:#DCF1E1;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:26px;height:26px;font-size:26px;color:#2E9D4F;font-variation-settings:'FILL' 1">check_circle</span></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 10px">
+<span style="font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.25;color:#17692F">THI Normal</span>
+<span style="flex:none;padding:4px 12px;border-radius:999px;background:#2A8444;color:#FFFFFF;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums">THI 68.9</span>
+</div>
+<span style="font-size:calc(15px*var(--ts,1));line-height:1.45;color:#3D5A45;text-wrap:pretty">{{ meta }}</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;gap:14px;align-items:flex-start">
+<span style="width:44px;height:44px;border-radius:12px;background:#F3F4F6;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:26px;height:26px;font-size:26px;color:#4B5563">help</span></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+<span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.25">Status saat ini tidak tersedia</span>
+<span style="font-size:calc(15px*var(--ts,1));line-height:1.45;color:#374151">Status terakhir: <b style="font-weight:700">THI Normal</b> · <span style="white-space:nowrap">30 Sep 12:49 WIB</span></span>
+<span style="font-size:calc(15px*var(--ts,1));line-height:1.45;color:#4B5563">{{ metaLast }} (terakhir)</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:8px;padding:8px 4px 0;font-size:calc(15px*var(--ts,1));font-weight:500;color:#374151;line-height:1.35"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:20px;height:20px;font-size:20px">history</span><span>Nilai sensor terakhir · 30 Sep 12:49 WIB</span></div>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(max(calc(140px*var(--ts,1)),calc(50% - 6px)),1fr));gap:12px">
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:14px 16px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:10px;background:#FFF3E0;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:22px;height:22px;font-size:22px;color:#EF8A17;font-variation-settings:'FILL' 1">device_thermostat</span></span><span style="font-size:calc(15px*var(--ts,1));font-weight:500;color:#4B5563;line-height:1.25">Suhu</span></div>
+<div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0 3px"><span style="font-size:calc(34px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.05;font-variant-numeric:tabular-nums;color:{{ valColor }}">21.6</span><span style="font-size:calc(18px*var(--ts,1));font-weight:500;color:#4B5563">°C</span></div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:700;line-height:1.2;padding:4px 8px;border-radius:8px;background:#E6F4EA;color:#1E7B3A">Normal</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.2;padding:4px 8px;border-radius:8px;background:#EEF0F3;color:#374151">Terakhir: Normal</span></sc-if>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:14px 16px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:10px;background:#E8F0FE;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:22px;height:22px;font-size:22px;color:#3B7BF2;font-variation-settings:'FILL' 1">water_drop</span></span><span style="font-size:calc(15px*var(--ts,1));font-weight:500;color:#4B5563;line-height:1.25">Kelembaban</span></div>
+<div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0 3px"><span style="font-size:calc(34px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.05;font-variant-numeric:tabular-nums;color:{{ valColor }}">72</span><span style="font-size:calc(18px*var(--ts,1));font-weight:500;color:#4B5563">%</span></div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:700;line-height:1.2;padding:4px 8px;border-radius:8px;background:#E6F4EA;color:#1E7B3A">Normal</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.2;padding:4px 8px;border-radius:8px;background:#EEF0F3;color:#374151">Terakhir: Normal</span></sc-if>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:14px 16px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:10px;background:#EEEDFC;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:22px;height:22px;font-size:22px;color:#5A55D6">speed</span></span><span style="font-size:calc(15px*var(--ts,1));font-weight:500;color:#4B5563;line-height:1.25">Indeks THI</span></div>
+<div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0 3px"><span style="font-size:calc(34px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.05;font-variant-numeric:tabular-nums;color:{{ valColor }}">68.9</span></div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:700;line-height:1.2;padding:4px 8px;border-radius:8px;background:#E6F4EA;color:#1E7B3A">Normal</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.2;padding:4px 8px;border-radius:8px;background:#EEF0F3;color:#374151">Terakhir: Normal</span></sc-if>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:14px 16px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:10px;background:#E7F6EA;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:22px;height:22px;font-size:22px;color:#43A85A;font-variation-settings:'FILL' 1">cloud</span></span><span style="font-size:calc(15px*var(--ts,1));font-weight:500;color:#4B5563;line-height:1.25">Amonia<br>(MQ-137)</span></div>
+<div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0 5px"><span style="font-size:calc(34px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.05;font-variant-numeric:tabular-nums;color:{{ valColor }}">184</span><span style="font-size:calc(18px*var(--ts,1));font-weight:500;color:#4B5563">ADC</span></div>
+<span style="font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.3;padding:4px 8px;border-radius:8px;background:#EEF0F3;color:#374151">Belum dikalibrasi</span>
+</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;gap:14px;align-items:flex-start">
+<span style="width:44px;height:44px;border-radius:12px;background:#E7F6EA;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:24px;height:24px;font-size:24px;color:#43A85A;font-variation-settings:'FILL' 1">cloud</span></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:calc(17px*var(--ts,1));font-weight:700;line-height:1.3">Gas Amonia (NH₃) · MQ-137</span>
+<span style="font-size:calc(18px*var(--ts,1));font-weight:500;line-height:1.35;font-variant-numeric:tabular-nums;color:{{ valColor }}">184 ADC · 0.25 V</span>
+<span style="font-size:calc(15px*var(--ts,1));line-height:1.45;color:#4B5563;text-wrap:pretty">ADC · belum dikalibrasi — nilai ppm belum tersedia</span>
+</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;gap:10px"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#2F62D9">power_settings_new</span><span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">Status Perangkat</span></div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="padding-left:32px;font-size:calc(15px*var(--ts,1));line-height:1.4;color:#4B5563">Kondisi aktual dari perangkat</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="padding-left:32px;font-size:calc(15px*var(--ts,1));line-height:1.4;color:#4B5563">Kondisi terakhir yang diketahui, bukan saat ini</span></sc-if>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(130px*var(--ts,1)),1fr));gap:12px">
+<sc-for list="{{ devices }}" as="d" hint-placeholder-count="2">
+<div style="background:#F5F6F8;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;min-width:0">
+<span style="width:40px;height:40px;border-radius:12px;background:{{ d.tileBg }};flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:22px;height:22px;font-size:22px;color:{{ d.iconColor }}">{{ d.icon }}</span></span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.3">{{ d.name }}</span>
+<sc-if value="{{ d.isOn }}"><span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.25;color:#1E7B3A">Menyala</span></sc-if>
+<sc-if value="{{ d.isOff }}"><span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.25;color:#111827">Mati</span></sc-if>
+<sc-if value="{{ d.isLast }}"><span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.25;color:#374151">{{ d.state }}</span><span style="font-size:calc(14px*var(--ts,1));line-height:1.3;color:#4B5563">terakhir diketahui</span></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px 16px 6px;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:10px;padding-bottom:6px"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#EF8A17">restaurant</span><span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">Pakan</span></div>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:2px 12px;padding:12px 0;border-bottom:1px solid #EEF0F3">
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.4">Terakhir</span>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-left:auto">
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="font-size:calc(17px*var(--ts,1));font-weight:500;line-height:1.35;text-align:right">4 Okt 12:45 WIB</span><span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.35;text-align:right">Aplikasi · 3 jam lalu</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(17px*var(--ts,1));font-weight:500;line-height:1.35;text-align:right">30 Sep 12:45 WIB</span><span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.35;text-align:right">Aplikasi · 4 hari lalu</span></sc-if>
+</div>
+</div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 12px;padding:12px 0">
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.4">Jadwal</span>
+<span style="margin-left:auto;font-size:calc(17px*var(--ts,1));font-weight:500;line-height:1.35;text-align:right;font-variant-numeric:tabular-nums">07:00 · 12:00 · 17:00 WIB</span>
+</div>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="align-self:stretch;display:flex;align-items:center;gap:10px"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#5A55D6">speed</span><span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">THI Monitor</span></div>
+<div style="position:relative;width:100%;max-width:280px;margin-top:4px">
+<svg viewBox="0 0 240 150" style="display:block;width:100%;height:auto;overflow:visible">
+<path d="M 20 128 A 100 100 0 0 1 101.26 29.77" style="fill:none;stroke:#D6EFDC;stroke-width:16"></path>
+<path d="M 101.26 29.77 A 100 100 0 0 1 138.74 29.77" style="fill:none;stroke:#FBE6BF;stroke-width:16"></path>
+<path d="M 138.74 29.77 A 100 100 0 0 1 220 128" style="fill:none;stroke:#F8D2CC;stroke-width:16"></path>
+<path d="M 20 128 A 100 100 0 0 1 82.60 35.26" style="fill:none;stroke:{{ arcColor }};stroke-width:16"></path>
+<line x1="102.95" y1="38.61" x2="99.58" y2="20.93" style="stroke:#FFFFFF;stroke-width:2.5"></line>
+<line x1="137.05" y1="38.61" x2="140.42" y2="20.93" style="stroke:#FFFFFF;stroke-width:2.5"></line>
+<circle cx="82.60" cy="35.26" r="10" style="fill:#FFFFFF;stroke:{{ arcColor }};stroke-width:4"></circle>
+<text x="20" y="148" style="font:500 12px Roboto,sans-serif;fill:#4B5563;text-anchor:middle">50</text>
+<text x="220" y="148" style="font:500 12px Roboto,sans-serif;fill:#4B5563;text-anchor:middle">100</text>
+<text x="98.26" y="15" style="font:500 12px Roboto,sans-serif;fill:#4B5563;text-anchor:middle">72</text>
+<text x="141.74" y="15" style="font:500 12px Roboto,sans-serif;fill:#4B5563;text-anchor:middle">78</text>
+</svg>
+<div style="position:absolute;left:0;right:0;bottom:13%;display:flex;justify-content:center">
+<span style="font-size:min(calc(46px*var(--ts,1)),60px);font-weight:700;letter-spacing:-.01em;line-height:1;font-variant-numeric:tabular-nums;color:{{ valColor }}">68.9</span>
+</div>
+</div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><span style="padding:6px 16px;border-radius:999px;background:#E6F4EA;color:#1E7B3A;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.25">Normal</span></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><span style="padding:6px 16px;border-radius:999px;background:#EEF0F3;color:#374151;font-size:calc(16px*var(--ts,1));font-weight:500;line-height:1.25;text-align:center">Status terakhir: Normal</span><span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.4;text-align:center">Nilai terakhir · 30 Sep 12:49 WIB</span></sc-if>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin-top:4px;font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.3">
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#D6EFDC;border:1.5px solid #5DBB72"></span>Normal</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#FBE6BF;border:1.5px solid #E9A23B"></span>Warning</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#F8D2CC;border:1.5px solid #E06456"></span>Danger</span>
+</div>
+</div>
+<sc-if value="{{ fresh }}" hint-placeholder-val="{{ true }}"><div style="text-align:center;padding:6px 0 4px;font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.4">Update: 4 Okt 16:20 WIB · 5 detik lalu</div></sc-if>
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><div style="text-align:center;padding:6px 0 4px;font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.4">Update: 30 Sep 12:49 WIB · 4 hari lalu</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ notHome }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:32px 20px">
+<span style="font-size:calc(28px*var(--ts,1));font-weight:700;line-height:1.2">{{ tabName }}</span>
+<span style="font-size:calc(17px*var(--ts,1));color:#4B5563;line-height:1.5">Tidak termasuk dalam pembaruan ini. Hanya Dashboard yang disempurnakan.</span>
+<button onClick="{{ goHome }}" style="align-self:flex-start;min-height:48px;margin-top:8px;padding:0 22px;border-radius:12px;border:1px solid #D5E0FA;background:#FFFFFF;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;color:#2F62D9;cursor:pointer">Kembali ke Dashboard</button>
+</div>
+</sc-if>
+</div>
+<div style="flex:none;display:flex;gap:4px;background:#FFFFFF;border-top:1px solid #E6E8EC;padding:8px 8px 6px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="flex:1 1 0;min-width:0;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:16px;background:{{ t.bg }};font-family:inherit;cursor:pointer;padding:6px 0;margin:0">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:26px;height:26px;font-size:26px;color:{{ t.color }};font-variation-settings:{{ t.fvs }}">{{ t.icon }}</span>
+<span style="font-size:14px;line-height:1.2;font-weight:{{ t.fw }};color:{{ t.color }};white-space:nowrap">{{ t.label }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;height:22px;display:flex;align-items:center;justify-content:center;background:#FFFFFF">
+<div style="width:108px;height:4px;border-radius:2px;background:#1F2937"></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:852},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;fresh&quot;,&quot;stale&quot;],&quot;default&quot;:&quot;fresh&quot;,&quot;tsType&quot;:&quot;'fresh'|'stale'&quot;},&quot;ts&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:1,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;},&quot;kipas&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Mati&quot;,&quot;Menyala&quot;],&quot;default&quot;:&quot;Mati&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pompa&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Mati&quot;,&quot;Menyala&quot;],&quot;default&quot;:&quot;Mati&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;phase&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;idle&quot;,&quot;connecting&quot;,&quot;serverOk&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;idle&quot;,&quot;tsType&quot;:&quot;'idle'|'connecting'|'serverOk'|'fail'&quot;},&quot;outcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;serverOk&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;serverOk&quot;,&quot;tsType&quot;:&quot;'serverOk'|'fail'&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;standard&quot;,&quot;reduced&quot;],&quot;default&quot;:&quot;standard&quot;,&quot;tsType&quot;:&quot;'standard'|'reduced'&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 0, phase: null, lastResult: null, pressed: false, osReduced: false };
+  rootRef = React.createRef();
+  applyScale() {
+    const el = this.rootRef.current;
+    if (el) el.style.setProperty('--ts', String(Number(this.props.ts) || 1));
+  }
+  componentDidMount() {
+    this.applyScale();
+    const mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq) {
+      this.mq = mq;
+      this.onMq = () => this.setState({ osReduced: mq.matches });
+      this.onMq();
+      mq.addEventListener && mq.addEventListener('change', this.onMq);
+    }
+  }
+  componentDidUpdate() { this.applyScale(); }
+  componentWillUnmount() {
+    clearTimeout(this.t);
+    if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.onMq);
+  }
+  reconnectVals() {
+    const init = this.props.phase ?? 'idle';
+    const phase = this.state.phase ?? init;
+    const isResult = (p) => p === 'serverOk' || p === 'fail';
+    const shown = this.state.lastResult ?? (isResult(init) ? init : null);
+    const busy = phase === 'connecting';
+    const reduced = this.props.motion === 'reduced' || this.state.osReduced;
+    const open = isResult(phase);
+    const large = (Number(this.props.ts) || 1) > 1.15;
+    return {
+      rcShift: large ? '-58px' : '0px',
+      busy, notBusy: !busy, busyAria: busy ? 'true' : 'false',
+      idleVis: busy ? 'hidden' : 'visible', busyVis: busy ? 'visible' : 'hidden',
+      btnCursor: busy ? 'progress' : 'pointer',
+      btnBg: this.state.pressed && !busy ? '#EEF3FE' : '#FFFFFF',
+      btnTransform: this.state.pressed && !busy && !reduced ? 'scale(0.97)' : 'none',
+      pressTransition: reduced ? 'none' : 'transform 120ms ease-out, background-color 120ms ease-out',
+      fbRows: open ? '1fr' : '0fr', fbOpacity: open ? 1 : 0,
+      fbTransition: reduced ? 'none' : 'grid-template-rows 180ms ease-out, opacity 180ms ease-out',
+      resServerOk: shown === 'serverOk', resFail: shown === 'fail',
+      spinner: React.createElement('span', { style: {
+        display: 'block', width: 18, height: 18, borderRadius: '50%', boxSizing: 'border-box',
+        border: '2.5px solid #D5E0FA', borderTopColor: '#2F62D9',
+        animation: reduced ? 'none' : 'pitik-spin 800ms linear infinite' } }),
+      pressOn: () => { if (!busy) this.setState({ pressed: true }); },
+      pressOff: () => { if (this.state.pressed) this.setState({ pressed: false }); },
+      reconnect: () => {
+        if (busy) return;
+        const result = this.props.outcome === 'fail' ? 'fail' : 'serverOk';
+        this.setState({ phase: 'connecting', pressed: false });
+        clearTimeout(this.t);
+        this.t = setTimeout(() => this.setState({ phase: result, lastResult: result }), 1800);
+      },
+    };
+  }
+  renderVals() {
+    const stale = (this.props.state ?? 'fresh') === 'stale';
+    const fanOn = (this.props.kipas ?? 'Mati') === 'Menyala';
+    const pumpOn = (this.props.pompa ?? 'Mati') === 'Menyala';
+    const w = (on) => (on ? 'menyala' : 'mati');
+    const dev = (name, icon, on) => ({
+      name, icon, state: on ? 'Menyala' : 'Mati',
+      isOn: !stale && on, isOff: !stale && !on, isLast: stale,
+      tileBg: !stale && on ? '#E6F4EA' : '#FFFFFF',
+      iconColor: !stale && on ? '#1E7B3A' : '#4B5563',
+    });
+    const tabs = [['Dashboard', 'dashboard'], ['Riwayat', 'show_chart'], ['Kontrol', 'tune'], ['Pengaturan', 'settings']]
+      .map(([label, icon], i) => {
+        const a = this.state.tab === i;
+        return { label, icon, go: () => this.setState({ tab: i }),
+          bg: a ? '#E8EFFD' : 'transparent', color: a ? '#2F62D9' : '#6B7280',
+          fvs: a ? "'FILL' 1" : "'FILL' 0", fw: a ? 700 : 500 };
+      });
+    return {
+      rootRef: this.rootRef, fresh: !stale, stale,
+      meta: `THI < 72 · Kipas ${w(fanOn)} · Pompa ${w(pumpOn)} · Mode manual`,
+      metaLast: `Kipas ${w(fanOn)} · Pompa ${w(pumpOn)} · Mode manual`,
+      devices: [dev('Kipas', 'air', fanOn), dev('Pompa', 'water_drop', pumpOn)],
+      valColor: stale ? '#374151' : '#111827',
+      arcColor: stale ? '#9CA3AF' : '#2E9D4F',
+      ...this.reconnectVals(),
+      tabs, isHome: this.state.tab === 0, notHome: this.state.tab !== 0,
+      tabName: tabs[this.state.tab].label,
+      goHome: () => this.setState({ tab: 0 }),
+    };
+  }
+}
+</script>
+</body>
+</html>

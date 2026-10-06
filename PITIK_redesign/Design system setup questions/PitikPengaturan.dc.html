@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=block">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}a{color:#2F62D9}a:hover{color:#2450B8}@keyframes pitik-spin{to{transform:rotate(360deg)}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F3F4F6;border-radius:32px;border:1px solid rgba(17,24,39,.14);box-shadow:0 1px 2px rgba(17,24,39,.05),0 16px 40px rgba(17,24,39,.08);font-family:Roboto,system-ui,sans-serif;color:#111827;-webkit-font-smoothing:antialiased">
+<div style="flex:none;height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font-size:14px;font-weight:500;font-variant-numeric:tabular-nums">
+<span>16.20</span>
+<div style="display:flex;align-items:center;gap:4px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">signal_cellular_alt</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">wifi</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">battery_full</span>
+</div>
+</div>
+<div ref="{{ scrollRef }}" style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;position:relative">
+<sc-if value="{{ isSet }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:10px;padding:4px 16px 24px">
+<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0 2px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:30px;height:30px;font-size:30px;color:#2F62D9;margin-top:1px">settings</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:calc(24px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.2">Pengaturan</span>
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.35;text-wrap:pretty">Konfigurasi aplikasi dan perangkat</span>
+</div>
+</div>
+<span style="padding:12px 4px 0;font-size:calc(15px*var(--ts,1));font-weight:700;color:#4B5563;line-height:1.3">Akun</span>
+<sc-if value="{{ member }}" hint-placeholder-val="{{ true }}">
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;align-items:center;flex-wrap:wrap;gap:12px 14px">
+<span style="width:56px;height:56px;border-radius:50%;background:#E8EFFD;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:28px;height:28px;font-size:28px;color:#2F62D9;font-variation-settings:'FILL' 1">person</span></span>
+<div style="flex:1 1 calc(160px*var(--ts,1));min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:6px">
+<span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums">+62 <span style="white-space:nowrap">812-••••-1234</span></span>
+<span style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 8px;border-radius:999px;background:#E6F4EA;color:#1E7B3A;font-size:calc(14px*var(--ts,1));font-weight:700;line-height:1.3"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">verified</span>Akun terverifikasi</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ guest }}" hint-placeholder-val="{{ false }}">
+<div style="background:#EEF3FE;border:1px solid #D5E0FA;border-radius:20px;padding:16px;display:flex;align-items:flex-start;gap:14px">
+<span style="width:56px;height:56px;border-radius:50%;background:#DCE6FB;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:28px;height:28px;font-size:28px;color:#2F62D9">person</span></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start">
+<span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.3;color:#1E3A8A">Mode tamu</span>
+<span style="margin-top:4px;font-size:calc(15px*var(--ts,1));line-height:1.45;color:#1F2937;text-wrap:pretty">Anda dapat melihat pengaturan, tetapi tidak dapat mengubahnya.</span>
+<button onClick="{{ signIn }}" onPointerDown="{{ pressIn }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" style="margin-top:10px;max-width:100%;min-height:48px;padding:8px 16px 8px 12px;display:flex;align-items:center;gap:8px;border-radius:12px;border:1px solid #C7D5F7;background:#FFFFFF;color:#2F62D9;font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.25;text-align:left;cursor:pointer;transform:{{ inTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px">login</span><span>Masuk</span></button>
+<sc-if value="{{ signinNote }}" hint-placeholder-val="{{ false }}"><span role="status" style="margin-top:8px;font-size:calc(14px*var(--ts,1));line-height:1.4;color:#374151">Prototipe: halaman masuk tidak termasuk.</span></sc-if>
+</div>
+</div>
+</sc-if>
+<span data-k="device" style="padding:12px 4px 0;font-size:calc(15px*var(--ts,1));font-weight:700;color:#4B5563;line-height:1.3">Perangkat</span>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:0 16px;display:flex;flex-direction:column">
+<sc-if value="{{ stale }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:flex-start;gap:8px;padding:14px 0 6px;font-size:calc(14px*var(--ts,1));line-height:1.45;color:#374151"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px">history</span><span>Nilai dari laporan terakhir perangkat · <span style="white-space:nowrap">30 Sep 12:49 WIB</span></span></div></sc-if>
+<sc-for list="{{ infoRows }}" as="r" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;min-height:56px;padding:10px 0;border-bottom:1px solid #EEF0F3">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#4B5563">{{ r.icon }}</span>
+<span style="flex:1 1 auto;min-width:0;font-size:calc(16px*var(--ts,1));line-height:1.35">{{ r.label }}</span>
+<span style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;text-align:right">
+<span style="font-size:calc(16px*var(--ts,1));line-height:1.35;color:#374151;font-variant-numeric:tabular-nums">{{ r.value }}</span>
+<sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:calc(14px*var(--ts,1));line-height:1.35;color:#4B5563">{{ r.sub }}</span></sc-if>
+</span>
+</div>
+</sc-for>
+<span style="padding:16px 0 2px;font-size:calc(15px*var(--ts,1));font-weight:700;color:#4B5563;line-height:1.3">Koneksi</span>
+<div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:4px 14px;min-height:56px;padding:10px 0;border-bottom:1px solid #EEF0F3">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#4B5563;margin-top:1px">wifi</span>
+<div style="flex:1 1 calc(150px*var(--ts,1));min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:calc(16px*var(--ts,1));line-height:1.35">Perangkat (ESP32)</span>
+<span style="font-size:calc(14px*var(--ts,1));line-height:1.4;color:#4B5563">{{ devSub }}</span>
+</div>
+<span style="margin-left:auto;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.35;color:{{ devColor }}">{{ devStatus }}</span>
+</div>
+<div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:4px 14px;min-height:56px;padding:14px 0 10px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#4B5563;margin-top:1px">link</span>
+<span style="flex:1 1 calc(150px*var(--ts,1));min-width:0;font-size:calc(16px*var(--ts,1));line-height:1.35">Server (Firebase)</span>
+<span style="margin-left:auto;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.35;color:{{ srvColor }}">{{ srvStatus }}</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:2px 0 16px {{ rcIndent }}">
+<button onClick="{{ reconnect }}" onPointerDown="{{ pressRc }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" disabled="{{ rcBusy }}" aria-busy="{{ rcAria }}" style="max-width:100%;min-height:48px;padding:8px 14px 8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;border-radius:12px;border:1px solid #D5E0FA;background:{{ rcBg }};color:#2F62D9;font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.25;text-align:left;cursor:{{ rcCursor }};transform:{{ rcTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent;touch-action:manipulation">
+<span style="width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ rcNotBusy }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px">refresh</span></sc-if>
+<sc-if value="{{ rcBusy }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>
+</span>
+<span style="display:grid;min-width:0">
+<span style="grid-area:1/1;visibility:{{ rcIdleVis }}">Sambungkan Ulang</span>
+<span style="grid-area:1/1;visibility:{{ rcBusyVis }}">Menyambungkan…</span>
+</span>
+</button>
+<span style="font-size:calc(14px*var(--ts,1));line-height:1.45;color:#4B5563;text-wrap:pretty">Sambungkan ulang aplikasi ke server bila data tidak masuk. ESP32 yang mati atau putus <span style="white-space:nowrap">Wi-Fi</span> harus dicek langsung.</span>
+<div style="align-self:stretch;display:grid;grid-template-rows:{{ rcRows }};opacity:{{ rcOp }};transition:{{ fbTransition }}">
+<div style="overflow:hidden;min-height:0">
+<div role="status" aria-live="polite" style="margin-top:2px;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:{{ rcRes.bg }};border:1px solid {{ rcRes.border }}">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px;color:{{ rcRes.ic }};font-variation-settings:'FILL' 1">{{ rcRes.icon }}</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:calc(15px*var(--ts,1));line-height:1.4;text-wrap:pretty">
+<span style="font-weight:700;color:{{ rcRes.tc }}">{{ rcRes.title }}</span>
+<sc-if value="{{ rcRes.hasSub }}" hint-placeholder-val="{{ false }}"><span style="color:#374151">{{ rcRes.sub }}</span></sc-if>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<span data-k="thi" style="padding:12px 4px 0;font-size:calc(15px*var(--ts,1));font-weight:700;color:#4B5563;line-height:1.3">Ambang THI</span>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;flex-direction:column;gap:18px">
+<sc-if value="{{ thiLocked }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:flex-start;gap:8px;font-size:calc(14px*var(--ts,1));line-height:1.4;color:#4B5563"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px">lock</span><span>Masuk untuk mengubah ambang THI</span></div></sc-if>
+<sc-for list="{{ sliders }}" as="s" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px">
+<span style="flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:10px;font-size:calc(16px*var(--ts,1));font-weight:500;line-height:1.35"><span style="width:12px;height:12px;border-radius:50%;flex:none;background:{{ s.dot }}"></span><span>{{ s.label }}</span></span>
+<span style="flex:none;min-width:60px;padding:4px 12px;border-radius:12px;background:{{ s.chipBg }};color:{{ s.chipColor }};font-size:calc(22px*var(--ts,1));font-weight:700;line-height:1.2;text-align:center;font-variant-numeric:tabular-nums">{{ s.value }}</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<button aria-label="{{ s.decLabel }}" disabled="{{ s.disabled }}" onClick="{{ s.dec }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid {{ s.btnBorder }};background:{{ s.btnBg }};color:{{ s.btnColor }};display:flex;align-items:center;justify-content:center;cursor:{{ s.cursor }};-webkit-tap-highlight-color:transparent"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">remove</span></button>
+<div role="slider" tabIndex="{{ s.tab }}" aria-label="{{ s.label }}" aria-valuemin="50" aria-valuemax="100" aria-valuenow="{{ s.value }}" aria-disabled="{{ s.ariaDis }}" onPointerDown="{{ s.down }}" onPointerMove="{{ s.move }}" onPointerUp="{{ s.up }}" onPointerCancel="{{ s.up }}" onKeyDown="{{ s.key }}" style="flex:1;min-width:0;position:relative;height:48px;cursor:{{ s.cursor }};touch-action:none;outline:none">
+<div style="position:absolute;left:14px;right:14px;top:0;bottom:0">
+<div style="position:absolute;left:0;right:0;top:20px;height:8px;border-radius:4px;background:{{ s.rest }}"></div>
+<div style="position:absolute;left:0;top:20px;height:8px;border-radius:4px;width:{{ s.pct }};background:{{ s.fill }}"></div>
+<span style="position:absolute;top:10px;left:{{ s.pct }};width:28px;height:28px;margin-left:-14px;border-radius:50%;background:{{ s.fill }};border:3px solid #FFFFFF;box-shadow:{{ s.thumbShadow }}"></span>
+</div>
+</div>
+<button aria-label="{{ s.incLabel }}" disabled="{{ s.disabled }}" onClick="{{ s.inc }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid {{ s.btnBorder }};background:{{ s.btnBg }};color:{{ s.btnColor }};display:flex;align-items:center;justify-content:center;cursor:{{ s.cursor }};-webkit-tap-highlight-color:transparent"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">add</span></button>
+</div>
+<span style="font-size:calc(14px*var(--ts,1));line-height:1.4;color:#4B5563">Dipakai oleh Mode otomatis.</span>
+</div>
+</sc-for>
+<div role="status" aria-live="polite" style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:{{ thiSt.bg }};border:1px solid {{ thiSt.border }}">
+<span style="width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px">
+<sc-if value="{{ thiSt.spin }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>
+<sc-if value="{{ thiSt.noSpin }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;color:{{ thiSt.ic }}">{{ thiSt.icon }}</span></sc-if>
+</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:calc(15px*var(--ts,1));line-height:1.4;text-wrap:pretty">
+<span style="font-weight:{{ thiSt.tw }};color:{{ thiSt.tc }}">{{ thiSt.title }}</span>
+<sc-if value="{{ thiSt.hasSub }}" hint-placeholder-val="{{ false }}"><span style="color:#374151">{{ thiSt.sub }}</span></sc-if>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px">
+<button onClick="{{ resetThi }}" disabled="{{ resetDisabled }}" style="min-height:48px;padding:0 4px;background:transparent;border:0;font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.3;text-align:left;color:{{ resetColor }};cursor:{{ resetCursor }}">Reset ke default (72/78)</button>
+<button onClick="{{ saveThi }}" onPointerDown="{{ pressSave }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" disabled="{{ saveDisabled }}" aria-busy="{{ saveBusy }}" style="flex:1 1 calc(170px*var(--ts,1));margin-left:auto;min-height:52px;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;background:{{ saveBg }};color:{{ saveColor }};font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.25;cursor:{{ saveCursor }};transform:{{ saveTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent;touch-action:manipulation">
+<span style="width:20px;height:20px;flex:none;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ saveBusy }}" hint-placeholder-val="{{ false }}">{{ spinnerLight }}</sc-if>
+<sc-if value="{{ saveIdle }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:20px;height:20px;font-size:20px">cloud_upload</span></sc-if>
+</span>
+<span style="display:grid;min-width:0;text-align:center">
+<span style="grid-area:1/1;visibility:{{ saveIdleVis }}">Simpan perubahan</span>
+<span style="grid-area:1/1;visibility:{{ saveBusyVis }}">Menyimpan…</span>
+</span>
+</button>
+</div>
+</div>
+<span data-k="feed" style="padding:12px 4px 0;font-size:calc(15px*var(--ts,1));font-weight:700;color:#4B5563;line-height:1.3">Jadwal Pakan</span>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);overflow:hidden;display:flex;flex-direction:column">
+<sc-if value="{{ feedLocked }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:flex-start;gap:8px;padding:14px 16px 2px;font-size:calc(14px*var(--ts,1));line-height:1.4;color:#4B5563"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px">lock</span><span>Masuk untuk mengubah jadwal pakan</span></div></sc-if>
+<sc-for list="{{ slots }}" as="f" hint-placeholder-count="3">
+<button onClick="{{ f.open }}" onPointerDown="{{ f.press }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" disabled="{{ f.disabled }}" aria-label="{{ f.aria }}" style="width:100%;display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;min-height:60px;padding:12px 16px;border:0;border-bottom:1px solid #EEF0F3;background:{{ f.bg }};text-align:left;font-family:inherit;color:#111827;cursor:{{ f.cursor }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#4B5563">restaurant</span>
+<span style="flex:1 1 auto;min-width:0;font-size:calc(16px*var(--ts,1));line-height:1.35">{{ f.label }}</span>
+<span style="margin-left:auto;display:flex;align-items:center;gap:6px"><span style="font-size:calc(17px*var(--ts,1));font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums;white-space:nowrap">{{ f.time }} WIB</span><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:{{ f.trailColor }}">{{ f.trail }}</span></span>
+</button>
+</sc-for>
+<div style="display:flex;gap:8px;align-items:flex-start;padding:12px 16px 0;font-size:calc(14px*var(--ts,1));line-height:1.45;color:#374151"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px">history</span><span>Pakan terakhir: <span style="white-space:nowrap">{{ lastFeedDate }}</span> · Aplikasi · <span style="white-space:nowrap">{{ lastFeedAgo }}</span></span></div>
+<div style="display:grid;grid-template-rows:{{ feedRows }};opacity:{{ feedOp }};transition:{{ fbTransition }};padding:0 16px">
+<div style="overflow:hidden;min-height:0">
+<div role="status" aria-live="polite" style="margin-top:10px;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:{{ feedMsg.bg }};border:1px solid {{ feedMsg.border }}">
+<span style="width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px">
+<sc-if value="{{ feedMsg.spin }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>
+<sc-if value="{{ feedMsg.noSpin }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;color:{{ feedMsg.ic }};font-variation-settings:'FILL' 1">{{ feedMsg.icon }}</span></sc-if>
+</span>
+<span style="min-width:0;font-size:calc(15px*var(--ts,1));line-height:1.4;font-weight:700;color:{{ feedMsg.tc }};text-wrap:pretty">{{ feedMsg.title }}</span>
+</div>
+</div>
+</div>
+<button onClick="{{ resetFeed }}" disabled="{{ resetFeedDisabled }}" style="align-self:flex-start;min-height:48px;margin:2px 12px 6px;padding:0 4px;background:transparent;border:0;font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.3;text-align:left;color:{{ resetFeedColor }};cursor:{{ resetFeedCursor }}">Reset ke default (07:00, 12:00, 17:00)</button>
+</div>
+<div style="margin-top:12px;background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);overflow:hidden;display:flex;flex-direction:column">
+<sc-for list="{{ helpRows }}" as="h" hint-placeholder-count="3">
+<button onClick="{{ h.go }}" onPointerDown="{{ h.press }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" style="width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:12px 16px;border:0;border-bottom:{{ h.border }};background:{{ h.bg }};text-align:left;font-family:inherit;color:#111827;cursor:pointer;transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#4B5563">{{ h.icon }}</span>
+<span style="flex:1;min-width:0;font-size:calc(16px*var(--ts,1));line-height:1.35">{{ h.label }}</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#6B7280">chevron_right</span>
+</button>
+</sc-for>
+<sc-if value="{{ infoNote }}" hint-placeholder-val="{{ false }}"><span role="status" style="padding:0 16px 14px 52px;font-size:calc(14px*var(--ts,1));line-height:1.4;color:#374151">{{ infoNoteText }}</span></sc-if>
+</div>
+<sc-if value="{{ showSignout }}" hint-placeholder-val="{{ true }}">
+<div data-k="end" style="margin-top:6px;background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);overflow:hidden;display:flex;flex-direction:column">
+<button onClick="{{ openSignout }}" onPointerDown="{{ pressOut }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" style="width:100%;display:flex;align-items:center;gap:14px;min-height:64px;padding:12px 16px;border:0;background:{{ outBg }};text-align:left;font-family:inherit;cursor:pointer;transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent">
+<span style="width:40px;height:40px;border-radius:12px;background:#FDECEA;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#C8372B">logout</span></span>
+<span style="flex:1;min-width:0;font-size:calc(16px*var(--ts,1));font-weight:500;line-height:1.35;color:#B42318">Keluar dari Akun</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#C8372B">chevron_right</span>
+</button>
+<sc-if value="{{ outNote }}" hint-placeholder-val="{{ false }}"><span role="status" style="padding:0 16px 14px 70px;font-size:calc(14px*var(--ts,1));line-height:1.4;color:#374151">Prototipe: proses keluar tidak dijalankan.</span></sc-if>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:18px 0 4px;text-align:center">
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.35">PITIK v1.0.0</span>
+<span style="font-size:calc(14px*var(--ts,1));color:#6B7280;line-height:1.35">BINUS University © 2026</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ notSet }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:32px 20px">
+<span style="font-size:calc(28px*var(--ts,1));font-weight:700;line-height:1.2">{{ tabName }}</span>
+<span style="font-size:calc(17px*var(--ts,1));color:#4B5563;line-height:1.5">Tidak termasuk dalam pembaruan ini. Hanya Pengaturan yang disempurnakan.</span>
+<button onClick="{{ goSet }}" style="align-self:flex-start;min-height:48px;margin-top:8px;padding:0 22px;border-radius:12px;border:1px solid #D5E0FA;background:#FFFFFF;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;color:#2F62D9;cursor:pointer">Kembali ke Pengaturan</button>
+</div>
+</sc-if>
+</div>
+<div style="flex:none;display:flex;gap:4px;background:#FFFFFF;border-top:1px solid #E6E8EC;padding:8px 8px 6px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="flex:1 1 0;min-width:0;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:16px;background:{{ t.bg }};font-family:inherit;cursor:pointer;padding:6px 0;margin:0">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:26px;height:26px;font-size:26px;color:{{ t.color }};font-variation-settings:{{ t.fvs }}">{{ t.icon }}</span>
+<span style="font-size:14px;line-height:1.2;font-weight:{{ t.fw }};color:{{ t.color }};white-space:nowrap">{{ t.label }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;height:22px;display:flex;align-items:center;justify-content:center;background:#FFFFFF">
+<div style="width:108px;height:4px;border-radius:2px;background:#1F2937"></div>
+</div>
+<div aria-hidden="{{ sheetHidden }}" style="position:absolute;inset:0;z-index:20;overflow:hidden;border-radius:32px;pointer-events:{{ sheetPe }}">
+<div onClick="{{ cancelEdit }}" style="position:absolute;inset:0;background:rgba(17,24,39,.36);opacity:{{ sheetOp }};transition:{{ ovTransition }}"></div>
+<div role="dialog" aria-modal="true" aria-label="{{ sheetTitle }}" style="position:absolute;left:0;right:0;bottom:{{ sheetBottom }};max-height:calc(100% - 48px);overflow-y:auto;background:#FFFFFF;border-radius:24px 24px 0 0;padding:20px 20px {{ sheetPadB }};display:flex;flex-direction:column;gap:16px;transform:{{ sheetY }};transition:{{ ovTransition }};box-shadow:0 -8px 24px rgba(16,24,40,.12)">
+<div style="display:flex;flex-direction:column;gap:4px">
+<span style="font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.3">{{ sheetTitle }}</span>
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.4">{{ sheetPrev }}</span>
+</div>
+<div style="display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0 8px;padding:2px 0"><span style="font-size:calc(40px*var(--ts,1));font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums">{{ sheetHH }}:{{ sheetMM }}</span><span style="font-size:calc(18px*var(--ts,1));color:#4B5563">WIB</span></div>
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px">
+<span style="flex:1 1 auto;font-size:calc(16px*var(--ts,1));font-weight:500;line-height:1.35">Jam</span>
+<div style="display:flex;align-items:center;gap:8px">
+<button aria-label="Kurangi jam" onClick="{{ decH }}" disabled="{{ editSaving }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid #D5DAE1;background:#FFFFFF;color:#1F2937;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">remove</span></button>
+<input aria-label="Jam" inputMode="numeric" maxLength="2" value="{{ sheetHH }}" onChange="{{ onHH }}" onBlur="{{ blurHH }}" disabled="{{ editSaving }}" style="width:calc(72px*var(--ts,1));height:56px;border-radius:12px;border:{{ hhBorder }};background:#FFFFFF;font-family:inherit;font-size:calc(26px*var(--ts,1));font-weight:700;text-align:center;color:#111827;font-variant-numeric:tabular-nums;outline:none">
+<button aria-label="Tambah jam" onClick="{{ incH }}" disabled="{{ editSaving }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid #D5DAE1;background:#FFFFFF;color:#1F2937;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">add</span></button>
+</div>
+</div>
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px">
+<span style="flex:1 1 auto;font-size:calc(16px*var(--ts,1));font-weight:500;line-height:1.35">Menit</span>
+<div style="display:flex;align-items:center;gap:8px">
+<button aria-label="Kurangi menit" onClick="{{ decM }}" disabled="{{ editSaving }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid #D5DAE1;background:#FFFFFF;color:#1F2937;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">remove</span></button>
+<input aria-label="Menit" inputMode="numeric" maxLength="2" value="{{ sheetMM }}" onChange="{{ onMM }}" onBlur="{{ blurMM }}" disabled="{{ editSaving }}" style="width:calc(72px*var(--ts,1));height:56px;border-radius:12px;border:{{ mmBorder }};background:#FFFFFF;font-family:inherit;font-size:calc(26px*var(--ts,1));font-weight:700;text-align:center;color:#111827;font-variant-numeric:tabular-nums;outline:none">
+<button aria-label="Tambah menit" onClick="{{ incM }}" disabled="{{ editSaving }}" style="flex:none;width:48px;height:48px;padding:0;border-radius:50%;border:1px solid #D5DAE1;background:#FFFFFF;color:#1F2937;display:flex;align-items:center;justify-content:center;cursor:pointer"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px">add</span></button>
+</div>
+</div>
+<sc-if value="{{ editErr }}" hint-placeholder-val="{{ false }}"><div role="alert" style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:#FDF1EF;border:1px solid #F3C6BF"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;margin-top:1px;color:#C8372B;font-variation-settings:'FILL' 1">error</span><span style="font-size:calc(15px*var(--ts,1));line-height:1.4;color:#A8281E;font-weight:700;text-wrap:pretty">Gagal menyimpan. Periksa internet ponsel, lalu coba lagi.</span></div></sc-if>
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<button onClick="{{ cancelEdit }}" disabled="{{ editSaving }}" style="flex:1 1 calc(120px*var(--ts,1));min-height:52px;padding:10px 16px;border-radius:14px;border:1px solid #D5E0FA;background:#FFFFFF;color:#2F62D9;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.25;cursor:pointer">Batal</button>
+<button onClick="{{ saveEdit }}" disabled="{{ editSaving }}" aria-busy="{{ editSaving }}" style="flex:1 1 calc(120px*var(--ts,1));min-height:52px;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;background:#2F62D9;color:#FFFFFF;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;line-height:1.25;cursor:pointer">
+<sc-if value="{{ editSaving }}" hint-placeholder-val="{{ false }}"><span style="width:18px;height:18px;flex:none;display:flex">{{ spinnerLight }}</span></sc-if>
+<span style="display:grid;min-width:0;text-align:center"><span style="grid-area:1/1;visibility:{{ editIdleVis }}">Simpan</span><span style="grid-area:1/1;visibility:{{ editBusyVis }}">Menyimpan…</span></span>
+</button>
+</div>
+</div>
+<sc-if value="{{ kbOpen }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:260px;background:#D1D5DB;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:#374151">Keyboard angka (sistem)</div></sc-if>
+</div>
+<div aria-hidden="{{ dlgHidden }}" style="position:absolute;inset:0;z-index:30;overflow:hidden;border-radius:32px;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:{{ dlgPe }}">
+<div onClick="{{ closeDlg }}" style="position:absolute;inset:0;background:rgba(17,24,39,.4);opacity:{{ dlgOp }};transition:{{ ovTransition }}"></div>
+<div role="alertdialog" aria-modal="true" aria-label="Keluar dari akun?" style="position:relative;width:100%;max-width:320px;background:#FFFFFF;border-radius:24px;padding:24px 20px 16px;display:flex;flex-direction:column;gap:20px;opacity:{{ dlgOp }};transform:{{ dlgScale }};transition:{{ ovTransition }};box-shadow:0 12px 32px rgba(16,24,40,.2)">
+<span style="font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.3">Keluar dari akun?</span>
+<div style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px">
+<button onClick="{{ closeDlg }}" style="min-height:48px;padding:0 18px;border-radius:12px;border:0;background:transparent;color:#2F62D9;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer">Batal</button>
+<button onClick="{{ confirmOut }}" style="min-height:48px;padding:0 20px;border-radius:12px;border:1px solid #F3C6BF;background:#FDECEA;color:#B42318;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;cursor:pointer">Keluar</button>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:852},&quot;conn&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;online&quot;,&quot;stale&quot;],&quot;default&quot;:&quot;online&quot;,&quot;tsType&quot;:&quot;'online'|'stale'&quot;},&quot;user&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;member&quot;,&quot;guest&quot;],&quot;default&quot;:&quot;member&quot;,&quot;tsType&quot;:&quot;'member'|'guest'&quot;},&quot;thi&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;clean&quot;,&quot;dirty&quot;,&quot;saving&quot;,&quot;ok&quot;,&quot;error&quot;],&quot;default&quot;:&quot;clean&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;sim&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ok&quot;,&quot;error&quot;],&quot;default&quot;:&quot;ok&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;editor&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;sheet&quot;,&quot;keyboard&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dialog&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;signout&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;jump&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;&quot;,&quot;device&quot;,&quot;thi&quot;,&quot;feed&quot;,&quot;end&quot;],&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rc&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;idle&quot;,&quot;connecting&quot;,&quot;serverOk&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;idle&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rcOutcome&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;serverOk&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;serverOk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ts&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:1,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;standard&quot;,&quot;reduced&quot;],&quot;default&quot;:&quot;standard&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 3, saved: null, draft: null, save: undefined, times: null, edit: undefined, feedMsg: null, dlg: undefined, outNote: false, infoNote: null, rc: null, rcLast: null, pressed: null, osReduced: false, signin: false };
+  rootRef = React.createRef();
+  scrollRef = React.createRef();
+  applyScale() {
+    const el = this.rootRef.current;
+    if (el) el.style.setProperty('--ts', String(Number(this.props.ts) || 1));
+  }
+  jumpTo() {
+    const sc = this.scrollRef.current, k = this.props.jump;
+    if (!sc || !k || this.userScrolled) return;
+    if (!this.onUserScroll) {
+      this.onUserScroll = () => { this.userScrolled = true; };
+      sc.addEventListener('wheel', this.onUserScroll, { passive: true });
+      sc.addEventListener('touchstart', this.onUserScroll, { passive: true });
+    }
+    const el = sc.querySelector('[data-k="' + k + '"]');
+    if (el) sc.scrollTop = Math.max(0, el.offsetTop - 8);
+  }
+  componentDidMount() {
+    this.applyScale();
+    const mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq) {
+      this.mq = mq;
+      this.onMq = () => this.setState({ osReduced: mq.matches });
+      this.onMq();
+      if (mq.addEventListener) mq.addEventListener('change', this.onMq);
+    }
+    this.jumps = [300, 900, 1800, 3000].map((ms) => setTimeout(() => this.jumpTo(), ms));
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this.jumpTo());
+  }
+  componentDidUpdate() { this.applyScale(); }
+  componentWillUnmount() {
+    [this.ts1, this.ts2, this.tr].concat(this.jumps || []).forEach(clearTimeout);
+    if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.onMq);
+  }
+  isGuest() { return (this.props.user ?? 'member') === 'guest'; }
+  thiBase() {
+    const pin = this.props.thi ?? 'clean';
+    const def = { fan: 72, pump: 78 };
+    const pinSaved = pin === 'ok' ? { fan: 74, pump: 78 } : def;
+    const pinDraft = pin === 'clean' ? pinSaved : { fan: 74, pump: 78 };
+    const pinSave = { saving: 'saving', ok: 'ok', error: 'error' }[pin] || null;
+    const st = this.state;
+    return { saved: st.saved || pinSaved, draft: st.draft || pinDraft, save: st.save !== undefined ? st.save : pinSave };
+  }
+  canEditThi() { return !this.isGuest() && this.thiBase().save !== 'saving'; }
+  setVal(k, v) {
+    if (!this.canEditThi()) return;
+    const nv = Math.max(50, Math.min(100, Math.round(v)));
+    const b = this.thiBase();
+    if (b.draft[k] === nv) return;
+    this.setState({ saved: b.saved, draft: Object.assign({}, b.draft, { [k]: nv }), save: null });
+  }
+  bump(k, d) { this.setVal(k, this.thiBase().draft[k] + d); }
+  saveThi() {
+    const b = this.thiBase();
+    const changed = b.draft.fan !== b.saved.fan || b.draft.pump !== b.saved.pump;
+    if (!changed || b.save === 'saving' || this.isGuest()) return;
+    clearTimeout(this.ts1);
+    this.setState({ saved: b.saved, draft: b.draft, save: 'saving', pressed: null });
+    this.ts1 = setTimeout(() => {
+      if (this.props.sim === 'error') this.setState({ save: 'error' });
+      else this.setState((st) => ({ saved: st.draft, save: 'ok' }));
+    }, 1300);
+  }
+  resetThi() {
+    if (!this.canEditThi()) return;
+    const b = this.thiBase();
+    this.setState({ saved: b.saved, draft: { fan: 72, pump: 78 }, save: null });
+  }
+  times() { return this.state.times || ['07:00', '12:00', '17:00']; }
+  curEdit() { return this.state.edit !== undefined ? this.state.edit : (this.props.editor ? { i: 0, h: '07', m: '30', phase: null } : null); }
+  patchEdit(ch) { const e = this.curEdit(); if (e) this.setState({ edit: Object.assign({}, e, ch) }); }
+  step(part, d) {
+    const e = this.curEdit();
+    if (!e || e.phase === 'saving') return;
+    const max = part === 'h' ? 24 : 60;
+    const n = ((parseInt(e[part], 10) || 0) + d + max) % max;
+    this.patchEdit({ [part]: String(n).padStart(2, '0'), phase: null });
+  }
+  typed(part, raw) {
+    const e = this.curEdit();
+    if (!e || e.phase === 'saving') return;
+    this.patchEdit({ [part]: String(raw).replace(/\D/g, '').slice(0, 2), phase: null });
+  }
+  blurred(part) {
+    const e = this.curEdit();
+    if (!e) return;
+    const n = Math.max(0, Math.min(part === 'h' ? 23 : 59, parseInt(e[part], 10) || 0));
+    this.patchEdit({ [part]: String(n).padStart(2, '0') });
+  }
+  saveEdit() {
+    const e = this.curEdit();
+    if (!e || e.phase === 'saving') return;
+    const hh = String(Math.max(0, Math.min(23, parseInt(e.h, 10) || 0))).padStart(2, '0');
+    const mm = String(Math.max(0, Math.min(59, parseInt(e.m, 10) || 0))).padStart(2, '0');
+    this.setState({ edit: Object.assign({}, e, { h: hh, m: mm, phase: 'saving' }), pressed: null });
+    clearTimeout(this.ts2);
+    this.ts2 = setTimeout(() => {
+      if (this.props.sim === 'error') { this.setState((st) => ({ edit: Object.assign({}, st.edit, { phase: 'error' }) })); return; }
+      const t = this.times().slice();
+      t[e.i] = hh + ':' + mm;
+      this.setState({ times: t, edit: null, feedMsg: { kind: 'ok', text: 'Pakan ' + (e.i + 1) + ' disimpan ke server: ' + hh + ':' + mm + ' WIB' } });
+    }, 1100);
+  }
+  resetFeed() {
+    if (this.isGuest() || (this.state.feedMsg && this.state.feedMsg.kind === 'saving')) return;
+    clearTimeout(this.ts2);
+    this.setState({ feedMsg: { kind: 'saving', text: 'Menyimpan jadwal default…' } });
+    this.ts2 = setTimeout(() => {
+      if (this.props.sim === 'error') this.setState({ feedMsg: { kind: 'error', text: 'Gagal menyimpan jadwal. Periksa internet ponsel, lalu coba lagi.' } });
+      else this.setState({ times: ['07:00', '12:00', '17:00'], feedMsg: { kind: 'ok', text: 'Jadwal default disimpan ke server: 07:00 · 12:00 · 17:00 WIB' } });
+    }, 1100);
+  }
+  renderVals() {
+    const p = this.props;
+    const stale = (p.conn ?? 'online') === 'stale';
+    const guest = this.isGuest();
+    const reduced = p.motion === 'reduced' || this.state.osReduced;
+    const pressed = this.state.pressed;
+    const press = (k) => () => this.setState({ pressed: k });
+    const release = () => { if (this.state.pressed) this.setState({ pressed: null }); };
+    const mkSpin = (track, head) => React.createElement('span', { style: { display: 'block', width: 18, height: 18, borderRadius: '50%', boxSizing: 'border-box', border: '2.5px solid ' + track, borderTopColor: head, animation: reduced ? 'none' : 'pitik-spin 800ms linear infinite' } });
+    const strip = (s) => Object.assign({ spin: false, icon: 'info', ic: '#4B5563', tc: '#111827', tw: 700, sub: '' }, s, { noSpin: !s.spin, hasSub: !!s.sub });
+
+    const infoRows = [
+      ['label', 'Nama Kandang', 'Kandang 1', ''],
+      ['memory', 'Device ID', 'ESP32-01', ''],
+      ['system_update', 'Firmware', 'v8.2', ''],
+      ['schedule', 'Jam Perangkat', stale ? '12:49 WIB' : '16:20 WIB', stale ? 'saat laporan terakhir' : ''],
+      ['timelapse', 'Uptime', '5 menit', stale ? 'saat laporan terakhir' : ''],
+    ].map(([icon, label, value, sub]) => ({ icon, label, value, sub, hasSub: !!sub }));
+
+    const init = p.rc ?? 'idle';
+    const rcPh = this.state.rc ?? init;
+    const isRes = (x) => x === 'serverOk' || x === 'fail';
+    const shown = this.state.rcLast ?? (isRes(init) ? init : null);
+    const rcBusy = rcPh === 'connecting';
+    const rcOpen = !rcBusy && isRes(rcPh);
+    const rcRes = strip(shown === 'fail'
+      ? { icon: 'cloud_off', ic: '#C8372B', bg: '#FDF1EF', border: '#F3C6BF', tc: '#A8281E', title: 'Belum terhubung ke server.', sub: 'Periksa internet ponsel Anda.' }
+      : stale ? { icon: 'cloud_done', ic: '#9A5B00', bg: '#FFF7E8', border: '#F1DDB0', tc: '#6B4100', title: 'Server terhubung, tetapi belum ada data baru.', sub: 'Periksa daya dan koneksi perangkat.' }
+      : { icon: 'cloud_done', ic: '#1E7B3A', bg: '#F0F9F2', border: '#CFEBD6', tc: '#17692F', title: 'Server terhubung.', sub: '' });
+
+    const b = this.thiBase();
+    const saving = b.save === 'saving';
+    const canEdit = !guest && !saving;
+    const changed = b.draft.fan !== b.saved.fan || b.draft.pump !== b.saved.pump;
+    const SL = [['fan', 'Ambang normal (kipas)', '#2E9D4F', '#D6EFDC', '#E6F4EA', '#17692F'], ['pump', 'Ambang bahaya (pompa)', '#D93D30', '#F8D2CC', '#FDECEA', '#A8281E']];
+    const sliders = SL.map(([k, label, fill, rest, chipBg, chipColor]) => {
+      const v = b.draft[k];
+      const fromX = (e) => { const r = e.currentTarget.getBoundingClientRect(); return 50 + Math.max(0, Math.min(1, (e.clientX - r.left - 14) / (r.width - 28))) * 50; };
+      return { k, label, value: String(v), pct: (((v - 50) / 50) * 100).toFixed(1) + '%',
+        dot: fill, fill: canEdit ? fill : '#B8BEC7', rest: canEdit ? rest : '#EEF0F3',
+        chipBg: canEdit ? chipBg : '#F3F4F6', chipColor: canEdit ? chipColor : '#374151',
+        thumbShadow: canEdit ? '0 1px 3px rgba(16,24,40,.3)' : 'none',
+        disabled: !canEdit, ariaDis: canEdit ? 'false' : 'true', tab: canEdit ? 0 : -1, cursor: canEdit ? 'pointer' : 'not-allowed',
+        btnBorder: canEdit ? '#D5DAE1' : '#EEF0F3', btnColor: canEdit ? '#1F2937' : '#9CA3AF', btnBg: canEdit ? '#FFFFFF' : '#F9FAFB',
+        decLabel: 'Kurangi ' + label, incLabel: 'Tambah ' + label,
+        dec: () => this.bump(k, -1), inc: () => this.bump(k, 1),
+        down: (e) => { if (!canEdit) return; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (x) {} this.drag = k; this.setVal(k, fromX(e)); },
+        move: (e) => { if (this.drag === k) this.setVal(k, fromX(e)); },
+        up: () => { this.drag = null; },
+        key: (e) => {
+          if (!canEdit) return;
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); this.bump(k, -1); }
+          if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); this.bump(k, 1); }
+        } };
+    });
+    const diff = [];
+    if (b.draft.fan !== b.saved.fan) diff.push('Kipas ' + b.draft.fan + ' (sebelumnya ' + b.saved.fan + ')');
+    if (b.draft.pump !== b.saved.pump) diff.push('Pompa ' + b.draft.pump + ' (sebelumnya ' + b.saved.pump + ')');
+    const ST = {
+      clean: { icon: 'check', ic: '#6B7280', bg: '#F5F6F8', border: '#EEF0F3', tc: '#374151', tw: 500, title: 'Tidak ada perubahan' },
+      dirty: { icon: 'edit', ic: '#9A5B00', bg: '#FFF7E8', border: '#F1DDB0', tc: '#6B4100', title: 'Belum disimpan', sub: diff.join(' · ') },
+      saving: { spin: true, bg: '#EEF3FE', border: '#D5E0FA', tc: '#1E3A8A', title: 'Menyimpan ke server…' },
+      ok: { icon: 'cloud_done', ic: '#1E7B3A', bg: '#F0F9F2', border: '#CFEBD6', tc: '#17692F', title: 'Pengaturan disimpan ke server', sub: 'Kipas ' + b.saved.fan + ' · Pompa ' + b.saved.pump },
+      error: { icon: 'error', ic: '#C8372B', bg: '#FDF1EF', border: '#F3C6BF', tc: '#A8281E', title: 'Gagal menyimpan', sub: 'Periksa internet ponsel, lalu coba lagi. Perubahan Anda belum hilang.' },
+    };
+    const kind = saving ? 'saving' : b.save === 'error' ? 'error' : changed ? 'dirty' : b.save === 'ok' ? 'ok' : 'clean';
+    const saveEnabled = changed && !saving && !guest;
+    const isDefault = b.draft.fan === 72 && b.draft.pump === 78;
+    const resetEnabled = canEdit && !isDefault;
+
+    const times = this.times();
+    const slots = times.map((t, i) => {
+      const k = 'slot' + i;
+      return { label: 'Pakan ' + (i + 1), time: t, aria: 'Ubah waktu Pakan ' + (i + 1) + ', ' + t + ' WIB', disabled: guest,
+        cursor: guest ? 'default' : 'pointer', trail: guest ? 'lock' : 'chevron_right', trailColor: guest ? '#9CA3AF' : '#6B7280',
+        bg: pressed === k && !guest ? '#F3F6FD' : 'transparent',
+        open: () => { if (guest) return; const [h, m] = t.split(':'); this.setState({ edit: { i, h, m, phase: null }, pressed: null }); },
+        press: () => { if (!guest) this.setState({ pressed: k }); } };
+    });
+    const fm = this.state.feedMsg;
+    const feedMsg = strip(!fm ? { bg: 'transparent', border: 'transparent', title: '' }
+      : fm.kind === 'ok' ? { icon: 'cloud_done', ic: '#1E7B3A', bg: '#F0F9F2', border: '#CFEBD6', tc: '#17692F', title: fm.text }
+      : fm.kind === 'error' ? { icon: 'error', ic: '#C8372B', bg: '#FDF1EF', border: '#F3C6BF', tc: '#A8281E', title: fm.text }
+      : { spin: true, bg: '#EEF3FE', border: '#D5E0FA', tc: '#1E3A8A', title: fm.text });
+    const feedSaving = !!fm && fm.kind === 'saving';
+
+    const helpRows = [['info', 'Tentang Aplikasi'], ['help', 'Bantuan'], ['shield', 'Kebijakan Privasi']].map(([icon, label], i, a) => {
+      const k = 'help' + i;
+      return { icon, label, border: i === a.length - 1 ? 'none' : '1px solid #EEF0F3', bg: pressed === k ? '#F3F6FD' : 'transparent',
+        press: press(k), go: () => this.setState({ infoNote: label, pressed: null }) };
+    });
+
+    const edit = this.curEdit();
+    if (edit) this._lastEdit = edit;
+    const se = edit || this._lastEdit || { i: 0, h: '07', m: '00', phase: null };
+    const sheetOpen = !!edit;
+    const kb = p.editor === 'keyboard' && sheetOpen;
+    const editSaving = sheetOpen && se.phase === 'saving';
+    const dlgOpen = this.state.dlg !== undefined ? this.state.dlg : p.dialog === 'signout';
+    const ov = reduced ? 'none' : 'opacity 200ms ease-out, transform 200ms ease-out';
+
+    const tabs = [['Dashboard', 'dashboard'], ['Riwayat', 'show_chart'], ['Kontrol', 'tune'], ['Pengaturan', 'settings']].map(([label, icon], i) => {
+      const a = this.state.tab === i;
+      return { label, icon, go: () => this.setState({ tab: i }), bg: a ? '#E8EFFD' : 'transparent', color: a ? '#2F62D9' : '#6B7280', fvs: a ? "'FILL' 1" : "'FILL' 0", fw: a ? 700 : 500 };
+    });
+    return {
+      rootRef: this.rootRef, scrollRef: this.scrollRef, spinner: mkSpin('#D5E0FA', '#2F62D9'), spinnerLight: mkSpin('rgba(255,255,255,.45)', '#FFFFFF'),
+      member: !guest, guest, signinNote: guest && this.state.signin,
+      signIn: () => this.setState({ signin: true, pressed: null }), pressIn: press('in'),
+      inTransform: pressed === 'in' && !reduced ? 'scale(0.97)' : 'none',
+      fresh: !stale, stale, infoRows,
+      devStatus: stale ? 'Offline' : 'Online', devColor: stale ? '#B42318' : '#1E7B3A',
+      devSub: stale ? 'Data terakhir: 30 Sep 12:49 WIB · 4 hari lalu' : 'Update: 4 Okt 16:20 WIB · 5 detik lalu',
+      srvStatus: rcBusy ? 'Menyambungkan…' : shown === 'fail' ? 'Tidak terhubung' : 'Terhubung',
+      srvColor: rcBusy ? '#4B5563' : shown === 'fail' ? '#B42318' : '#1E7B3A',
+      rcBusy, rcNotBusy: !rcBusy, rcAria: rcBusy ? 'true' : 'false', rcIdleVis: rcBusy ? 'hidden' : 'visible', rcBusyVis: rcBusy ? 'visible' : 'hidden',
+      rcCursor: rcBusy ? 'progress' : 'pointer', rcBg: pressed === 'rc' && !rcBusy ? '#E1E9FC' : '#EEF3FE',
+      rcTransform: pressed === 'rc' && !rcBusy && !reduced ? 'scale(0.97)' : 'none',
+      pressRc: () => { if (!rcBusy) this.setState({ pressed: 'rc' }); },
+      reconnect: () => {
+        if (rcBusy) return;
+        const res = p.rcOutcome === 'fail' ? 'fail' : 'serverOk';
+        clearTimeout(this.tr);
+        this.setState({ rc: 'connecting', pressed: null });
+        this.tr = setTimeout(() => this.setState({ rc: res, rcLast: res }), 1800);
+      },
+      rcIndent: (Number(p.ts) || 1) > 1.15 ? '0px' : '36px',
+      rcRows: rcOpen ? '1fr' : '0fr', rcOp: rcOpen ? 1 : 0, rcRes,
+      fbTransition: reduced ? 'none' : 'grid-template-rows 180ms ease-out, opacity 180ms ease-out',
+      pressTransition: reduced ? 'none' : 'transform 120ms ease-out, background-color 120ms ease-out',
+      release,
+      sliders, thiLocked: guest, thiSt: strip(ST[kind]),
+      saveThi: () => this.saveThi(), pressSave: () => { if (saveEnabled) this.setState({ pressed: 'save' }); },
+      saveDisabled: !saveEnabled, saveCursor: saveEnabled ? 'pointer' : 'not-allowed',
+      saveBg: saveEnabled ? (pressed === 'save' ? '#2450B8' : '#2F62D9') : saving ? '#2F62D9' : '#E5E7EB',
+      saveColor: saveEnabled || saving ? '#FFFFFF' : '#4B5563',
+      saveTransform: pressed === 'save' && saveEnabled && !reduced ? 'scale(0.98)' : 'none',
+      saveBusy: saving, saveIdle: !saving, saveIdleVis: saving ? 'hidden' : 'visible', saveBusyVis: saving ? 'visible' : 'hidden',
+      resetThi: () => this.resetThi(), resetDisabled: !resetEnabled, resetColor: resetEnabled ? '#2F62D9' : '#6B7280', resetCursor: resetEnabled ? 'pointer' : 'not-allowed',
+      slots, feedLocked: guest, lastFeedDate: stale ? '30 Sep 12:45 WIB' : '4 Okt 12:45 WIB', lastFeedAgo: stale ? '4 hari lalu' : '3 jam lalu',
+      feedMsg, feedRows: fm ? '1fr' : '0fr', feedOp: fm ? 1 : 0,
+      resetFeed: () => this.resetFeed(), resetFeedDisabled: guest || feedSaving, resetFeedColor: guest || feedSaving ? '#6B7280' : '#2F62D9', resetFeedCursor: guest || feedSaving ? 'not-allowed' : 'pointer',
+      helpRows, infoNote: !!this.state.infoNote, infoNoteText: (this.state.infoNote || '') + ' belum termasuk dalam prototipe ini.',
+      showSignout: !guest, outBg: pressed === 'out' ? '#FDF1EF' : '#FFFFFF', pressOut: press('out'),
+      openSignout: () => this.setState({ dlg: true, outNote: false, pressed: null }), outNote: this.state.outNote,
+      sheetPe: sheetOpen ? 'auto' : 'none', sheetHidden: sheetOpen ? 'false' : 'true', sheetOp: sheetOpen ? 1 : 0,
+      sheetY: sheetOpen ? 'translateY(0%)' : 'translateY(100%)', sheetBottom: kb ? '260px' : '0px', sheetPadB: kb ? '16px' : '40px',
+      sheetTitle: 'Ubah waktu Pakan ' + (se.i + 1), sheetPrev: 'Sebelumnya ' + times[se.i] + ' WIB',
+      sheetHH: se.h, sheetMM: se.m, kbOpen: kb,
+      hhBorder: kb ? '2px solid #2F62D9' : '1px solid #C9CED6', mmBorder: '1px solid #C9CED6',
+      onHH: (e) => this.typed('h', e.target.value), onMM: (e) => this.typed('m', e.target.value),
+      blurHH: () => this.blurred('h'), blurMM: () => this.blurred('m'),
+      decH: () => this.step('h', -1), incH: () => this.step('h', 1), decM: () => this.step('m', -1), incM: () => this.step('m', 1),
+      cancelEdit: () => { if (!editSaving) this.setState({ edit: null }); }, saveEdit: () => this.saveEdit(),
+      editSaving, editIdle: !editSaving, editIdleVis: editSaving ? 'hidden' : 'visible', editBusyVis: editSaving ? 'visible' : 'hidden',
+      editErr: sheetOpen && se.phase === 'error',
+      ovTransition: ov,
+      dlgPe: dlgOpen ? 'auto' : 'none', dlgHidden: dlgOpen ? 'false' : 'true', dlgOp: dlgOpen ? 1 : 0, dlgScale: dlgOpen || reduced ? 'scale(1)' : 'scale(0.96)',
+      closeDlg: () => this.setState({ dlg: false }), confirmOut: () => this.setState({ dlg: false, outNote: true }),
+      tabs, isSet: this.state.tab === 3, notSet: this.state.tab !== 3, tabName: tabs[this.state.tab].label,
+      goSet: () => this.setState({ tab: 3 }),
+    };
+  }
+}
+</script>
+</body>
+</html>

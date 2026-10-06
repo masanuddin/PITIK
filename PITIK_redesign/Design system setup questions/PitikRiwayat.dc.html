@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0&amp;display=block">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}a{color:#2F62D9}a:hover{color:#2450B8}@keyframes pitik-spin{to{transform:rotate(360deg)}}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#F3F4F6;border-radius:32px;border:1px solid rgba(17,24,39,.14);box-shadow:0 1px 2px rgba(17,24,39,.05),0 16px 40px rgba(17,24,39,.08);font-family:Roboto,system-ui,sans-serif;color:#111827;-webkit-font-smoothing:antialiased">
+<div style="flex:none;height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px 0 26px;font-size:14px;font-weight:500;font-variant-numeric:tabular-nums">
+<span>16.20</span>
+<div style="display:flex;align-items:center;gap:4px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">signal_cellular_alt</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">wifi</span>
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:18px;height:18px;font-size:18px;font-variation-settings:'FILL' 1">battery_full</span>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none">
+<sc-if value="{{ isHist }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:4px 16px 24px">
+<div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:10px 12px;padding:8px 0 2px">
+<div style="flex:1 1 calc(170px*var(--ts,1));min-width:0;display:flex;align-items:flex-start;gap:10px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:30px;height:30px;font-size:30px;color:#2F62D9;margin-top:1px">show_chart</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:calc(24px*var(--ts,1));font-weight:700;letter-spacing:-.01em;line-height:1.2">Riwayat Data</span>
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.35;text-wrap:pretty">Analisis tren suhu &amp; kelembapan</span>
+</div>
+</div>
+<button onClick="{{ copyCsv }}" onPointerDown="{{ pressCsv }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" disabled="{{ csvDisabled }}" style="flex:none;max-width:100%;min-height:48px;padding:8px 14px 8px 12px;display:flex;align-items:center;gap:8px;border-radius:12px;border:1px solid {{ csvBorder }};background:{{ csvBg }};color:{{ csvColor }};font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.25;text-align:left;cursor:{{ csvCursor }};transform:{{ csvTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent;touch-action:manipulation">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px">{{ csvIcon }}</span>
+<span style="display:grid;min-width:0">
+<span style="grid-area:1/1;visibility:{{ csvIdleVis }}">Salin CSV</span>
+<span style="grid-area:1/1;visibility:{{ csvDoneVis }}">Disalin</span>
+</span>
+</button>
+<span role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">{{ csvLive }}</span>
+</div>
+<div style="display:flex;flex-direction:column">
+<div role="tablist" aria-label="Periode riwayat" style="display:flex;gap:4px;padding:4px;background:#FFFFFF;border:1px solid #E6E8EC;border-radius:16px;box-shadow:0 1px 2px rgba(16,24,40,.04)">
+<sc-for list="{{ periods }}" as="p" hint-placeholder-count="4">
+<button role="tab" aria-selected="{{ p.sel }}" onClick="{{ p.go }}" style="flex:1 1 0;min-width:0;min-height:48px;padding:6px 4px;border:0;border-radius:12px;background:{{ p.bg }};color:{{ p.color }};font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:{{ p.fw }};line-height:1.2;text-align:center;cursor:pointer;transition:{{ segTransition }};-webkit-tap-highlight-color:transparent">{{ p.label }}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-rows:{{ noticeRows }};opacity:{{ noticeOpacity }};transition:{{ fbTransition }}">
+<div style="overflow:hidden;min-height:0">
+<div role="status" aria-live="polite" style="margin-top:10px;display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:16px;background:#EEF3FE;border:1px solid #D5E0FA">
+<span style="width:20px;height:20px;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px">
+<sc-if value="{{ isSwitching }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>
+</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px;font-size:calc(15px*var(--ts,1));line-height:1.4;text-wrap:pretty">
+<span style="font-weight:700;color:#1E3A8A">Memuat data <span style="white-space:nowrap">{{ period }}</span>…</span>
+<span style="color:#374151">Grafik di bawah masih data <span style="white-space:nowrap">{{ dataPeriod }}</span>.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+<div role="status" aria-live="polite" style="display:flex;align-items:center;gap:10px;padding:2px 4px;font-size:calc(15px*var(--ts,1));font-weight:500;color:#374151;line-height:1.4"><span style="width:20px;height:20px;flex:none;display:flex;align-items:center;justify-content:center">{{ spinner }}</span><span>Memuat riwayat <span style="white-space:nowrap">{{ period }}</span>…</span></div>
+<sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="2">
+<div aria-hidden="true" style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:36px;height:36px;border-radius:10px;background:#EEF0F3"></span><span style="width:120px;height:16px;border-radius:6px;background:#EEF0F3"></span></div>
+<div style="height:150px;border-radius:12px;background:#F5F6F8"></div>
+<div style="display:flex;gap:6px"><span style="flex:1;height:56px;border-radius:12px;background:#F5F6F8"></span><span style="flex:1;height:56px;border-radius:12px;background:#F5F6F8"></span><span style="flex:1;height:56px;border-radius:12px;background:#F5F6F8"></span></div>
+</div>
+</sc-for>
+</sc-if>
+<sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+<span style="width:56px;height:56px;border-radius:16px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;margin-bottom:4px"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:30px;height:30px;font-size:30px;color:#4B5563">inbox</span></span>
+<span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3;text-wrap:pretty">Tidak ada data dalam <span style="white-space:nowrap">{{ period }}</span> terakhir</span>
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.45;max-width:300px;text-wrap:pretty">Belum ada riwayat yang tersimpan untuk periode ini. Coba pilih periode lain.</span>
+</div>
+</sc-if>
+<sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+<div role="alert" style="background:#FFFFFF;border:1px solid #F3D3CD;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px;align-items:flex-start">
+<span style="width:44px;height:44px;border-radius:12px;background:#FDF1EF;flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:24px;height:24px;font-size:24px;color:#C8372B">cloud_off</span></span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">Gagal memuat riwayat <span style="white-space:nowrap">{{ period }}</span></span>
+<span style="font-size:calc(15px*var(--ts,1));color:#4B5563;line-height:1.45;text-wrap:pretty">Periksa koneksi internet ponsel Anda, lalu coba lagi.</span>
+</div>
+</div>
+<button onClick="{{ retry }}" onPointerDown="{{ pressRetry }}" onPointerUp="{{ release }}" onPointerLeave="{{ release }}" onPointerCancel="{{ release }}" style="align-self:flex-start;margin-left:{{ errIndent }};max-width:100%;min-height:48px;padding:8px 16px 8px 12px;display:flex;align-items:center;gap:8px;border-radius:12px;border:1px solid #D5E0FA;background:{{ retryBg }};color:#2F62D9;font-family:inherit;font-size:calc(15px*var(--ts,1));font-weight:700;line-height:1.25;cursor:pointer;transform:{{ retryTransform }};transition:{{ pressTransition }};-webkit-tap-highlight-color:transparent;touch-action:manipulation"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px">refresh</span><span>Coba Lagi</span></button>
+</div>
+</sc-if>
+<sc-if value="{{ hasCharts }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ charts }}" as="c" hint-placeholder-count="4">
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ c.tint }};flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:{{ c.color }};font-variation-settings:{{ c.fvs }}">{{ c.icon }}</span></span>
+<span style="flex:1 1 auto;min-width:0;font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">{{ c.title }}</span>
+<span style="flex:none;padding:3px 10px;border-radius:999px;background:#F3F4F6;border:1px solid #E6E8EC;color:#374151;font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.3;white-space:nowrap">{{ c.periodTag }}</span>
+</div>
+<div style="display:grid;align-items:center;min-height:calc(24px*var(--ts,1))">
+<span style="grid-area:1/1;visibility:{{ c.hintVis }};display:flex;align-items:center;gap:6px;font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.4"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px">touch_app</span><span>Ketuk grafik untuk melihat nilai</span></span>
+<span aria-live="polite" style="grid-area:1/1;visibility:{{ c.readVis }};display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;line-height:1.4"><span style="font-size:calc(14px*var(--ts,1));color:#374151">{{ c.readTime }}</span><span style="font-size:calc(17px*var(--ts,1));font-weight:700;color:#111827;font-variant-numeric:tabular-nums">{{ c.readVal }}</span></span>
+</div>
+<div style="display:grid;grid-template-columns:calc(34px*var(--ts,1)) minmax(0,1fr);grid-template-rows:150px auto;column-gap:8px;row-gap:10px;padding-top:8px">
+<div style="position:relative">
+<sc-for list="{{ c.yticks }}" as="t" hint-placeholder-count="4"><span style="position:absolute;right:0;top:{{ t.top }};transform:translateY(-50%);font-size:calc(14px*var(--ts,1));line-height:1;color:#4B5563;font-variant-numeric:tabular-nums">{{ t.label }}</span></sc-for>
+</div>
+<div style="position:relative">
+<sc-if value="{{ c.isThi }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;left:0;right:0;top:0;height:33.33%;background:#FDF4E3"></div>
+<div style="position:absolute;left:0;right:0;top:33.33%;bottom:0;background:#EEF8F0"></div>
+</sc-if>
+<sc-for list="{{ c.yticks }}" as="t" hint-placeholder-count="4"><div style="position:absolute;left:0;right:0;top:{{ t.top }};height:1px;background:#E9EBEF"></div></sc-for>
+<sc-if value="{{ c.isThi }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:0;right:0;top:33.33%;border-top:1.5px dashed #D98A1C"></div></sc-if>
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible">
+<path d="{{ c.area }}" style="fill:{{ c.areaFill }};stroke:none"></path>
+<path d="{{ c.line }}" style="fill:none;stroke:{{ c.color }};stroke-width:2.5px;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round"></path>
+</svg>
+<sc-for list="{{ c.dots }}" as="d" hint-placeholder-count="9"><span style="position:absolute;left:{{ d.left }};top:{{ d.top }};width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:#FFFFFF;border:2px solid {{ d.color }}"></span></sc-for>
+<sc-if value="{{ c.hasSel }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:0;bottom:0;left:{{ c.selLeft }};width:0;border-left:1.5px solid #9CA3AF"></div>
+<span style="position:absolute;left:{{ c.selLeft }};top:{{ c.selTop }};width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#FFFFFF;border:3.5px solid {{ c.color }};box-shadow:0 1px 3px rgba(16,24,40,.2)"></span>
+</sc-if>
+<div onClick="{{ c.onTap }}" role="button" aria-label="{{ c.ariaLabel }}" style="position:absolute;left:-6px;right:-6px;top:-10px;bottom:-10px;cursor:pointer;-webkit-tap-highlight-color:transparent"></div>
+</div>
+<div></div>
+<div style="display:flex;justify-content:space-between;gap:8px;font-size:calc(14px*var(--ts,1));line-height:1.3;color:#4B5563">
+<sc-for list="{{ c.xticks }}" as="x" hint-placeholder-count="3"><span style="display:flex;flex-direction:column;align-items:{{ x.align }};text-align:{{ x.ta }};min-width:0"><span>{{ x.d }}</span><span style="font-variant-numeric:tabular-nums">{{ x.t }}</span></span></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ c.stats }}" as="s" hint-placeholder-count="3">
+<div style="flex:1 1 calc(84px*var(--ts,1));min-width:0;background:#F5F6F8;border-radius:12px;padding:10px 8px 10px 10px;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.3">{{ s.label }}</span>
+<span style="display:flex;align-items:baseline;flex-wrap:wrap;gap:0 3px"><span style="font-size:calc(19px*var(--ts,1));font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums">{{ s.value }}</span><span style="font-size:calc(14px*var(--ts,1));color:#4B5563">{{ s.unit }}</span></span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ c.isThi }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px 16px;font-size:calc(14px*var(--ts,1));color:#4B5563;line-height:1.3">
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#D6EFDC;border:1.5px solid #5DBB72"></span>Normal</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#FBE6BF;border:1.5px solid #E9A23B"></span>Warning</span>
+<span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#F8D2CC;border:1.5px solid #E06456"></span>Danger</span>
+</div>
+</sc-if>
+<sc-if value="{{ c.isMq }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px;align-items:flex-start;font-size:calc(14px*var(--ts,1));line-height:1.45;color:#374151"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:18px;height:18px;font-size:18px;color:#4B5563;margin-top:1px">info</span><span><b style="font-weight:700">Belum dikalibrasi — bukan nilai ppm.</b> Nilai mentah ADC 0–4095.</span></div>
+</sc-if>
+</div>
+</sc-for>
+<div style="background:#FFFFFF;border:1px solid #E6E8EC;border-radius:20px;box-shadow:0 1px 2px rgba(16,24,40,.04);padding:16px 16px 6px;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;padding-bottom:6px">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:#2F62D9">insert_chart</span>
+<span style="flex:1 1 auto;min-width:0;font-size:calc(18px*var(--ts,1));font-weight:700;line-height:1.3">Statistik</span>
+<span style="flex:none;padding:3px 10px;border-radius:999px;background:#F3F4F6;border:1px solid #E6E8EC;color:#374151;font-size:calc(14px*var(--ts,1));font-weight:500;line-height:1.3;white-space:nowrap">{{ dataPeriod }}</span>
+</div>
+<sc-for list="{{ summary }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;min-height:60px;padding:10px 0;border-bottom:{{ s.border }}">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ s.tint }};flex:none;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;flex:none;width:22px;height:22px;font-size:22px;color:{{ s.color }};font-variation-settings:{{ s.fvs }}">{{ s.icon }}</span></span>
+<span style="flex:1 1 auto;min-width:0;font-size:calc(16px*var(--ts,1));color:#374151;line-height:1.35">{{ s.label }}</span>
+<span style="margin-left:auto;display:flex;align-items:baseline;gap:0 3px"><span style="font-size:calc(20px*var(--ts,1));font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums">{{ s.value }}</span><span style="font-size:calc(15px*var(--ts,1));color:#4B5563">{{ s.unit }}</span></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ notHist }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:12px;padding:32px 20px">
+<span style="font-size:calc(28px*var(--ts,1));font-weight:700;line-height:1.2">{{ tabName }}</span>
+<span style="font-size:calc(17px*var(--ts,1));color:#4B5563;line-height:1.5">Tidak termasuk dalam pembaruan ini. Hanya Riwayat yang disempurnakan.</span>
+<button onClick="{{ goHist }}" style="align-self:flex-start;min-height:48px;margin-top:8px;padding:0 22px;border-radius:12px;border:1px solid #D5E0FA;background:#FFFFFF;font-family:inherit;font-size:calc(16px*var(--ts,1));font-weight:700;color:#2F62D9;cursor:pointer">Kembali ke Riwayat</button>
+</div>
+</sc-if>
+</div>
+<div style="flex:none;display:flex;gap:4px;background:#FFFFFF;border-top:1px solid #E6E8EC;padding:8px 8px 6px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="flex:1 1 0;min-width:0;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:16px;background:{{ t.bg }};font-family:inherit;cursor:pointer;padding:6px 0;margin:0">
+<span style="font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;white-space:nowrap;display:inline-block;overflow:hidden;width:26px;height:26px;font-size:26px;color:{{ t.color }};font-variation-settings:{{ t.fvs }}">{{ t.icon }}</span>
+<span style="font-size:14px;line-height:1.2;font-weight:{{ t.fw }};color:{{ t.color }};white-space:nowrap">{{ t.label }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;height:22px;display:flex;align-items:center;justify-content:center;background:#FFFFFF">
+<div style="width:108px;height:4px;border-radius:2px;background:#1F2937"></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:393,&quot;height&quot;:852},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loaded&quot;,&quot;loading&quot;,&quot;empty&quot;,&quot;error&quot;,&quot;switching&quot;],&quot;default&quot;:&quot;loaded&quot;,&quot;tsType&quot;:&quot;'loaded'|'loading'|'empty'|'error'|'switching'&quot;},&quot;period&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1 Jam&quot;,&quot;24 Jam&quot;,&quot;7 Hari&quot;,&quot;30 Hari&quot;],&quot;default&quot;:&quot;7 Hari&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dataPeriod&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;7 Hari&quot;,&quot;30 Hari&quot;],&quot;default&quot;:&quot;7 Hari&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pick&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:-1,&quot;tsType&quot;:&quot;number&quot;},&quot;ts&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:1,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;standard&quot;,&quot;reduced&quot;],&quot;default&quot;:&quot;standard&quot;,&quot;tsType&quot;:&quot;'standard'|'reduced'&quot;},&quot;fetch&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ok&quot;,&quot;fail&quot;],&quot;default&quot;:&quot;ok&quot;,&quot;tsType&quot;:&quot;'ok'|'fail'&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 1, period: null, phase: null, dataPeriod: undefined, sel: null, copied: false, pressed: null, osReduced: false };
+  rootRef = React.createRef();
+  applyScale() {
+    const el = this.rootRef.current;
+    if (el) el.style.setProperty('--ts', String(Number(this.props.ts) || 1));
+  }
+  componentDidMount() {
+    this.applyScale();
+    const mq = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq) {
+      this.mq = mq;
+      this.onMq = () => this.setState({ osReduced: mq.matches });
+      this.onMq();
+      if (mq.addEventListener) mq.addEventListener('change', this.onMq);
+    }
+  }
+  componentDidUpdate() { this.applyScale(); }
+  componentWillUnmount() {
+    clearTimeout(this.t); clearTimeout(this.ct);
+    if (this.mq && this.mq.removeEventListener) this.mq.removeEventListener('change', this.onMq);
+  }
+  hasData(p) { return p === '7 Hari' || p === '30 Hari'; }
+  load(p, retained, retry) {
+    clearTimeout(this.t);
+    this.setState({ period: p, phase: retained ? 'switching' : 'loading', dataPeriod: retained || null, sel: null, copied: false, pressed: null });
+    this.t = setTimeout(() => {
+      if (this.props.fetch === 'fail' && !retry) this.setState({ phase: 'error', dataPeriod: null });
+      else if (this.hasData(p)) this.setState({ phase: 'loaded', dataPeriod: p });
+      else this.setState({ phase: 'empty', dataPeriod: null });
+    }, 1300);
+  }
+  renderVals() {
+    const ts = Number(this.props.ts) || 1;
+    const reduced = this.props.motion === 'reduced' || this.state.osReduced;
+    const period = this.state.period ?? this.props.period ?? '7 Hari';
+    const phase = this.state.phase ?? this.props.state ?? 'loaded';
+    const dataPeriod = this.state.dataPeriod !== undefined ? this.state.dataPeriod
+      : phase === 'switching' ? (this.props.dataPeriod ?? '7 Hari') : phase === 'loaded' ? period : null;
+    const showData = (phase === 'loaded' || phase === 'switching') && !!dataPeriod;
+
+    const T = [['28 Sep', '12:45'], ['28 Sep', '18:45'], ['29 Sep', '00:45'], ['29 Sep', '06:45'], ['29 Sep', '12:45'], ['29 Sep', '18:45'], ['30 Sep', '00:45'], ['30 Sep', '06:45'], ['30 Sep', '12:45']];
+    const n = T.length;
+    const xticks = (ts > 1.6 ? [0, n - 1] : [0, (n - 1) / 2, n - 1]).map((i, k, a) => ({
+      d: T[i][0], t: T[i][1],
+      align: k === 0 ? 'flex-start' : k === a.length - 1 ? 'flex-end' : 'center',
+      ta: k === 0 ? 'left' : k === a.length - 1 ? 'right' : 'center' }));
+    const DEF = [
+      { key: 'suhu', title: 'Suhu (°C)', icon: 'device_thermostat', fvs: "'FILL' 1", color: '#EF8A17', tint: '#FFF3E0', areaFill: 'rgba(239,138,23,0.10)', unit: '°C', dec: 1, lo: 21, hi: 24, step: 1,
+        v: [22.0, 22.2, 22.4, 22.6, 22.9, 23.1, 23.2, 22.6, 21.5],
+        stats: [['Rata-rata', '22.5', '°C'], ['Minimum', '21.5', '°C'], ['Maksimum', '23.2', '°C']] },
+      { key: 'rh', title: 'Kelembapan (%)', icon: 'water_drop', fvs: "'FILL' 1", color: '#3B7BF2', tint: '#E8F0FE', areaFill: 'rgba(59,123,242,0.10)', unit: '%', dec: 1, lo: 67, hi: 73, step: 2,
+        v: [71.2, 70.8, 70.4, 70.0, 69.6, 69.0, 68.0, 69.0, 72.0],
+        stats: [['Rata-rata', '70.0', '%'], ['Minimum', '68.0', '%'], ['Maksimum', '72.0', '%']] },
+      { key: 'thi', title: 'Indeks THI', icon: 'speed', fvs: "'FILL' 0", color: '#5A55D6', tint: '#EEEDFC', areaFill: 'rgba(0,0,0,0)', unit: '', dec: 1, lo: 68, hi: 74, step: 2, thi: true,
+        v: [69.6, 69.8, 70.0, 70.2, 70.5, 70.7, 70.8, 70.3, 69.0],
+        stats: [['Rata-rata', '70.1', ''], ['Ambang (Pengaturan)', '72 · 78', '']] },
+      { key: 'mq', title: 'Sensor gas MQ-137 (ADC)', icon: 'cloud', fvs: "'FILL' 1", color: '#43A85A', tint: '#E7F6EA', areaFill: 'rgba(67,168,90,0.10)', unit: 'ADC', dec: 0, lo: 130, hi: 220, step: 30, mq: true,
+        v: [203, 188, 172, 167, 169, 160, 141, 155, 184],
+        stats: [['Rata-rata', '171', 'ADC'], ['Minimum', '141', 'ADC'], ['Maksimum', '203', 'ADC']] },
+    ];
+    const pickInit = this.props.pick != null && Number(this.props.pick) >= 0 ? { suhu: Number(this.props.pick) } : {};
+    const sel = this.state.sel ?? pickInit;
+    const join = (v, u) => (u === 'ADC' ? v + ' ADC' : v + u);
+    const charts = !showData ? [] : DEF.map((c) => {
+      const span = c.hi - c.lo;
+      const pts = c.v.map((v, i) => ({ x: (i / (n - 1)) * 100, y: ((c.hi - v) / span) * 100 }));
+      const line = pts.map((p, i) => (i ? 'L' : 'M') + p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' ');
+      const s = sel[c.key];
+      const hasSel = typeof s === 'number' && s >= 0 && s < n;
+      const ri = hasSel ? s : n - 1;
+      const yticks = [];
+      for (let v = c.lo; v <= c.hi + 1e-9; v += c.step) yticks.push({ label: String(v), top: (((c.hi - v) / span) * 100).toFixed(2) + '%' });
+      return {
+        key: c.key, title: c.title, icon: c.icon, fvs: c.fvs, color: c.color, tint: c.tint,
+        isThi: !!c.thi, isMq: !!c.mq, periodTag: dataPeriod,
+        line, area: line + ' L100,100 L0,100 Z', areaFill: c.areaFill, yticks, xticks,
+        dots: pts.map((p) => ({ left: p.x.toFixed(2) + '%', top: p.y.toFixed(2) + '%', color: c.color })),
+        stats: c.stats.map(([label, value, unit]) => ({ label, value, unit })),
+        hasSel, selLeft: pts[ri].x.toFixed(2) + '%', selTop: pts[ri].y.toFixed(2) + '%',
+        hintVis: hasSel ? 'hidden' : 'visible', readVis: hasSel ? 'visible' : 'hidden',
+        readTime: T[ri][0] + ' ' + T[ri][1] + ' WIB', readVal: join(c.v[ri].toFixed(c.dec), c.unit),
+        ariaLabel: 'Grafik ' + c.title + ', ketuk untuk melihat nilai',
+        onTap: (e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          const i = Math.max(0, Math.min(n - 1, Math.round(((e.clientX - r.left) / r.width) * (n - 1))));
+          this.setState((st) => {
+            const next = Object.assign({}, st.sel ?? pickInit);
+            if (next[c.key] === i) delete next[c.key]; else next[c.key] = i;
+            return { sel: next };
+          });
+        },
+      };
+    });
+    const summary = [
+      { icon: 'device_thermostat', fvs: "'FILL' 1", color: '#EF8A17', tint: '#FFF3E0', label: 'Rata-rata suhu', value: '22.5', unit: '°C' },
+      { icon: 'water_drop', fvs: "'FILL' 1", color: '#3B7BF2', tint: '#E8F0FE', label: 'Rata-rata kelembapan', value: '70.0', unit: '%' },
+      { icon: 'speed', fvs: "'FILL' 0", color: '#5A55D6', tint: '#EEEDFC', label: 'Rata-rata THI', value: '70.1', unit: '' },
+    ].map((s, i, a) => Object.assign(s, { border: i === a.length - 1 ? 'none' : '1px solid #EEF0F3' }));
+
+    const spinner = React.createElement('span', { style: {
+      display: 'block', width: 18, height: 18, borderRadius: '50%', boxSizing: 'border-box',
+      border: '2.5px solid #D5E0FA', borderTopColor: '#2F62D9',
+      animation: reduced ? 'none' : 'pitik-spin 800ms linear infinite' } });
+    const periods = ['1 Jam', '24 Jam', '7 Hari', '30 Hari'].map((p) => {
+      const a = p === period;
+      return { label: p, sel: a ? 'true' : 'false', bg: a ? '#2F62D9' : 'transparent', color: a ? '#FFFFFF' : '#4B5563', fw: a ? 700 : 500,
+        go: () => {
+          if (p === period && phase !== 'error') return;
+          if (showData && p === dataPeriod) { clearTimeout(this.t); this.setState({ period: p, phase: 'loaded', dataPeriod: p }); return; }
+          this.load(p, showData ? dataPeriod : null, false);
+        } };
+    });
+    const csvOk = phase === 'loaded' && !!dataPeriod;
+    const copied = this.state.copied && csvOk;
+    const pressed = this.state.pressed;
+    const press = (k) => () => this.setState({ pressed: k });
+    const release = () => { if (this.state.pressed) this.setState({ pressed: null }); };
+    const tabs = [['Dashboard', 'dashboard'], ['Riwayat', 'show_chart'], ['Kontrol', 'tune'], ['Pengaturan', 'settings']].map(([label, icon], i) => {
+      const a = this.state.tab === i;
+      return { label, icon, go: () => this.setState({ tab: i }),
+        bg: a ? '#E8EFFD' : 'transparent', color: a ? '#2F62D9' : '#6B7280', fvs: a ? "'FILL' 1" : "'FILL' 0", fw: a ? 700 : 500 };
+    });
+    return {
+      rootRef: this.rootRef, spinner, periods, charts, summary, period, dataPeriod: dataPeriod || '',
+      isSwitching: phase === 'switching', isLoading: phase === 'loading', isEmpty: phase === 'empty', isError: phase === 'error', hasCharts: showData,
+      noticeRows: phase === 'switching' ? '1fr' : '0fr', noticeOpacity: phase === 'switching' ? 1 : 0,
+      fbTransition: reduced ? 'none' : 'grid-template-rows 180ms ease-out, opacity 180ms ease-out',
+      segTransition: reduced ? 'none' : 'background-color 160ms ease-out, color 160ms ease-out',
+      pressTransition: reduced ? 'none' : 'transform 120ms ease-out, background-color 120ms ease-out',
+      skeletons: [{ k: 1 }, { k: 2 }],
+      csvDisabled: !csvOk, csvCursor: csvOk ? 'pointer' : 'not-allowed',
+      csvBg: !csvOk ? '#F3F4F6' : pressed === 'csv' ? '#E1E9FC' : '#EEF3FE',
+      csvBorder: csvOk ? '#D5E0FA' : '#E6E8EC', csvColor: csvOk ? '#2F62D9' : '#6B7280',
+      csvTransform: pressed === 'csv' && csvOk && !reduced ? 'scale(0.97)' : 'none',
+      csvIcon: copied ? 'check' : 'content_copy', csvIdleVis: copied ? 'hidden' : 'visible', csvDoneVis: copied ? 'visible' : 'hidden',
+      csvLive: copied ? 'CSV ' + dataPeriod + ' disalin ke papan klip' : '',
+      copyCsv: () => {
+        if (!csvOk) return;
+        clearTimeout(this.ct);
+        this.setState({ copied: true, pressed: null });
+        this.ct = setTimeout(() => this.setState({ copied: false }), 2200);
+      },
+      pressCsv: press('csv'), pressRetry: press('retry'), release,
+      retryBg: pressed === 'retry' ? '#E1E9FC' : '#EEF3FE',
+      retryTransform: pressed === 'retry' && !reduced ? 'scale(0.97)' : 'none',
+      retry: () => this.load(period, null, true),
+      errIndent: ts > 1.15 ? '0px' : '56px',
+      tabs, isHist: this.state.tab === 1, notHist: this.state.tab !== 1, tabName: tabs[this.state.tab].label,
+      goHist: () => this.setState({ tab: 1 }),
+    };
+  }
+}
+</script>
+</body>
+</html>
