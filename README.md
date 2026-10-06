@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="assets/images/smartquail.png" alt="SmartQuail Logo" width="120"/>
+  <img src="assets/images/pitik.png" alt="PITIK Logo" width="120"/>
 
-  # SmartQuail
+  # PITIK
 
   **Sistem Monitoring & Kontrol Kandang Burung Puyuh Berbasis IoT**
 
@@ -17,13 +17,13 @@
 
 ---
 
-## Tentang SmartQuail
+## Tentang PITIK
 
-SmartQuail adalah aplikasi mobile berbasis Flutter yang terhubung langsung dengan perangkat ESP32 melalui Firebase Realtime Database. Aplikasi ini dirancang khusus untuk peternak burung puyuh agar dapat memantau dan mengontrol kondisi kandang secara remote -- mulai dari suhu, kelembaban, kadar amonia (NH₃), hingga kendali perangkat seperti kipas, pompa air, dan auto-feeder.
+PITIK adalah aplikasi mobile berbasis Flutter yang terhubung langsung dengan perangkat ESP32 melalui Firebase Realtime Database. Aplikasi ini dirancang khusus untuk peternak burung puyuh agar dapat memantau dan mengontrol kondisi kandang secara remote -- mulai dari suhu, kelembaban, kadar amonia (NH₃), hingga kendali perangkat seperti kipas, pompa air, dan auto-feeder.
 
-### Mengapa SmartQuail?
+### Mengapa PITIK?
 
-Burung puyuh sangat sensitif terhadap perubahan suhu dan kelembaban. THI (Temperature Humidity Index) di atas 78 dapat menyebabkan *heat stress* yang berujung pada penurunan produksi telur hingga kematian. SmartQuail hadir sebagai solusi monitoring cerdas yang memberikan **notifikasi real-time** dan **kontrol perangkat** untuk menjaga kondisi kandang tetap optimal.
+Burung puyuh sangat sensitif terhadap perubahan suhu dan kelembaban. THI (Temperature Humidity Index) di atas 78 dapat menyebabkan *heat stress* yang berujung pada penurunan produksi telur hingga kematian. PITIK hadir sebagai solusi monitoring cerdas yang memberikan **notifikasi real-time** dan **kontrol perangkat** untuk menjaga kondisi kandang tetap optimal.
 
 ---
 
@@ -65,7 +65,7 @@ Burung puyuh sangat sensitif terhadap perubahan suhu dan kelembaban. THI (Temper
 
 ```
 +-----------------+         +------------------+         +-----------------+
-|   ESP32 Device  | --WiFi--+  Firebase RTDB   |<--------+  SmartQuail App |
+|   ESP32 Device  | --WiFi--+  Firebase RTDB   |<--------+  PITIK App |
 |                 |         |                  |          |  (Flutter)      |
 |  * DHT22        |         |  /sensor_data    |          |                 |
 |  * MQ-135 (NH3) |         |  /controls       |          |  * Dashboard    |
@@ -111,7 +111,7 @@ SmartQuail/
 │       ├── auth_widgets.dart        # Apple-style form widgets
 │       ├── kpi_card.dart            # KPI metric card widget
 │       └── thi_gauge.dart           # Custom animated THI gauge
-├── esp32_smartquail.ino             # Arduino IDE sketch untuk ESP32
+├── esp32_pitik.ino             # Arduino IDE sketch untuk ESP32
 ├── test/
 │   ├── services/
 │   │   ├── auth_service_test.dart   # 7 unit test formatPhoneNumber
@@ -121,7 +121,7 @@ SmartQuail/
 │   └── ci.yml                       # GitHub Actions CI
 ├── assets/
 │   └── images/
-│       └── smartquail.png           # App logo
+│       └── pitik.png                # App logo
 ├── android/                         # Konfigurasi Android
 ├── ios/                             # Konfigurasi iOS
 └── pubspec.yaml                     # Dependencies
@@ -213,10 +213,10 @@ SmartQuail/
 
 Proyek ini memiliki **2 versi firmware ESP32**:
 
-- **`esp32_smartquail.ino` (v5)** — Versi awal, polling `/controls`, PWM fan, relay feeder
+- **`esp32_pitik.ino` (v5)** — Versi awal, polling `/controls`, PWM fan, relay feeder
 - **ESP32 v9** — Versi terbaru: stream-based controls, watchdog, exponential backoff, NTP primary (RTC opsional), Nextion LCD, servo feeder
 
-### Hardware v5 (`esp32_smartquail.ino`)
+### Hardware v5 (`esp32_pitik.ino`)
 
 | Komponen | Pin ESP32 | Fungsi |
 |----------|-----------|--------|
@@ -262,11 +262,11 @@ Install via Library Manager:
 
 ### Konfigurasi
 
-**v5 (`esp32_smartquail.ino`):**
+**v5 (`esp32_pitik.ino`):**
 ```cpp
 #define WIFI_SSID       "nama_wifi_kamu"
 #define WIFI_PASSWORD   "password_wifi_kamu"
-#define FIREBASE_HOST   "smartquail-18658-default-rtdb.asia-southeast1.firebasedatabase.app"
+#define FIREBASE_HOST   "pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app"
 #define FIREBASE_AUTH   "your_database_secret"
 ```
 
@@ -274,8 +274,8 @@ Install via Library Manager:
 ```cpp
 #define WIFI_SSID        "nama_wifi_kamu"
 #define WIFI_PASSWORD    "password_wifi_kamu"
-#define FIREBASE_HOST    "smartquail-18658-default-rtdb.asia-southeast1.firebasedatabase.app"
-#define FIREBASE_API_KEY "AIzaSyAxtACANl6k0S3b_QOjxQtSLc6-4u4EqiQ"
+#define FIREBASE_HOST    "pitik-1ad2d-default-rtdb.asia-southeast1.firebasedatabase.app"
+#define FIREBASE_API_KEY "isi-web-api-key"
 ```
 > v9 menggunakan API key + test mode auth, bukan legacy database secret.
 
@@ -320,7 +320,7 @@ Install via Library Manager:
 | **ESP32 v9** | Tambah field `ts` (epoch timestamp) di node history sebagai fallback Flutter |
 | **ESP32 v9** | Stream-based `/controls` (real-time), exponential backoff Firebase, watchdog timer |
 
-> **Catatan:** ESP32 v9 menggunakan pin berbeda dari v5 di `esp32_smartquail.ino` — cek bagian Setup ESP32 v9 di bawah.
+> **Catatan:** ESP32 v9 menggunakan pin berbeda dari v5 di `esp32_pitik.ino` — cek bagian Setup ESP32 v9 di bawah.
 
 ---
 
